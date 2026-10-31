@@ -1569,7 +1569,7 @@
     function syncMachPool() {
       const want = [];
       MACHINES.slice().reverse().forEach((m) => {
-        const n = Math.floor(count(m));
+        const n = Math.max(0, Math.floor(count(m)) - ((S.pannes || {})[m] || 0)); // 0.58 : les exemplaires en panne ne travaillent pas
         for (let i = 0; i < n; i++) want.push(m);
       });
       for (const fam in S.ateliers || {}) {
@@ -1720,6 +1720,38 @@
         bien[s.id] = reste;
       });
     }
+    /* 0.58 : l'usure et les pannes des machines (D.ATELIERS.pannes) */
+    function panneStep(dt) {
+      const P = D.ATELIERS.pannes;
+      if (!P) return;
+      const us = S.usure || (S.usure = {}), pa = S.pannes || (S.pannes = {});
+      const marche = {};
+      machPool.forEach((w) => { if (!workerOf(w.m) && (w.job !== null || w.cad !== null)) marche[w.m] = true; });
+      let change = false;
+      MACHINES.forEach((m) => {
+        const n = Math.floor(count(m));
+        if (n <= 0) { if (pa[m]) { delete pa[m]; change = true; } return; }
+        if (!marche[m]) { if (us[m] > 0) us[m] = Math.max(0, us[m] - dt / P.repos); return; }
+        if ((pa[m] || 0) >= Math.ceil(n * P.partMax)) return;
+        us[m] = (us[m] || 0) + dt / P.monte;
+        if (us[m] >= 1) { us[m] = 0; pa[m] = (pa[m] || 0) + 1; change = true; }
+      });
+      if (change) { assignWorkers(); domChanged(); E.emit("struct"); }
+    }
+    E.panneCout = () => { const d = TRAV.apprenti; return Math.round(((D.ATELIERS.pannes || {}).cout || 3) * d.cout * Math.pow(TRAV.parAge || 1, Math.max(0, S.age - d.age))); };
+    E.usure = (m) => ({ valeur: Math.min(1, (S.usure || {})[m] || 0), pannes: (S.pannes || {})[m] || 0 });
+    E.reparer = function (m) {
+      const P = D.ATELIERS.pannes, u = E.usure(m);
+      if (!P || Math.floor(count(m)) <= 0) return { ok: false, why: "aucune" };
+      if (!u.pannes && u.valeur < P.alerte) return { ok: false, why: "bon" };
+      const cout = E.panneCout();
+      if ((S.ecus || 0) + 1e-9 < cout) return { ok: false, why: "ecus", cout };
+      S.ecus -= cout;
+      if (u.pannes) S.pannes[m] = u.pannes - 1;
+      (S.usure || (S.usure = {}))[m] = Math.min(S.usure[m] || 0, P.apres);
+      assignWorkers(); domChanged(); E.emit("struct");
+      return { ok: true, cout };
+    };
     function fatigueStep(dt) {
       const F = TRAV.fatigue;
       if (!F || !autoPossible() || !S.ateliers) return;
@@ -1881,6 +1913,12 @@
         if (reste > D.ATELIERS.combustibleAlerte) return;
         liste["combu:" + s.id] = { id: "combu:" + s.id, kind: "combustible", fam: null, ing: f.id, ings: [], fams: [], bloque: [], poids: 4, src: s.id, arret: reste <= 0, reste: Math.ceil(reste) };
       });
+      const PN = D.ATELIERS.pannes;
+      if (PN) MACHINES.forEach((m) => {
+        const u = E.usure(m);
+        if (Math.floor(count(m)) <= 0 || (!u.pannes && u.valeur < PN.alerte)) return;
+        liste["panne:" + m] = { id: "panne:" + m, kind: "panne", fam: null, ing: null, ings: [], fams: [], bloque: [], poids: 3, src: m, pannes: u.pannes };
+      });
       const nom = (id) => ((item(id) && item(id).n) || id).toLowerCase();
       const maj = (s) => s.charAt(0).toUpperCase() + s.slice(1);
       const F = (f) => { const x = ((D.ATELIERS || {}).familles || []).find((y) => y.id === f); return x ? x.n : f; };
@@ -1911,6 +1949,11 @@
         else if (g.kind === "seuil0") { txt = F(g.fam) + " est au repos : on n’y fabrique rien seul"; action = { k: "metier", fam: g.fam, label: "Régler le seuil" }; }
         else if (g.kind === "seuil") { txt = maj(n) + " est au seuil de " + F(g.fam) + " et il en faut plus"; action = { k: "metier", fam: g.fam, label: "Monter le seuil" }; }
         else if (g.kind === "greve") { txt = F(g.fam) + " : les travailleurs sont en grève, ils ne fabriquent plus rien seuls"; action = { k: "prime", fam: g.fam, cout: E.primeCout(g.fam), label: "Verser une prime" }; }
+        else if (g.kind === "panne") {
+          const mn = (item(g.src) && item(g.src).n) || g.src;
+          txt = g.pannes ? "En panne : " + mn + (g.pannes > 1 ? " (" + g.pannes + " exemplaires)" : "") : mn + " est très usé : une panne approche";
+          action = { k: "reparer", id: g.src, cout: E.panneCout(), label: (g.pannes ? "Réparer" : "Entretenir") + " · " + E.panneCout() + " écus" };
+        }
         else if (g.kind === "combustible") {
           const src = (item(g.src) && item(g.src).n || g.src).toLowerCase();
           txt = g.arret ? "La " + src + " est à l’arrêt : plus de " + nom(g.ing) + " en réserve" : "La " + src + " n’a plus que " + g.reste + " s de " + nom(g.ing);
@@ -5575,7 +5618,7 @@
       workStep(dt, offline);
       if(E.atelierEconomyStep)E.atelierEconomyStep(dt);
       runCadences(dt, c);
-      if (!offline) { combustionStep(dt); fatigueStep(dt); }
+      if (!offline) { combustionStep(dt); panneStep(dt); fatigueStep(dt); }
       pullOrderInputs();
       if (!offline && c.pip > 0) {
         S.pipAcc += c.pip * dt;
@@ -5761,6 +5804,8 @@
       const chunk = dt > 600 ? 10 : 1;
       let left = dt;
       try { while (left > 0) { const d = Math.min(chunk, left); step(d, true); left -= d; } } finally { OFF = false; }
+      if (S.pannes && Object.keys(S.pannes).some((m) => S.pannes[m])) { S.pannes = {}; syncMachPool(); } // jeu fermé, l’atelier a réparé
+      if (S.usure) S.usure = {};
       if (TRAV.fatigue && S.ateliers) { // pendant l’absence, les travailleurs se reposent
         for (const fam in S.ateliers) {
           const a = S.ateliers[fam];

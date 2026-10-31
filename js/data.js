@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.58.0";
+  D.VERSION = "0.59.0";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1555,6 +1555,8 @@
     },
     /* en dessous de ce nombre de secondes de réserve, on prévient */
     combustibleAlerte: 120,
+    /* 0.58 : l'usure des machines. Une machine qui travaille s'use (monte : secondes de travail continu pour atteindre 1) ; à 1, un exemplaire tombe en panne et ne travaille plus jusqu'à réparation, au plus la moitié du parc d'un type à la fois. Au repos l'usure redescend (repos : secondes pour la vider). On prévient à « alerte ». Réparer ou entretenir coûte « cout » fois le prix d'un apprenti de l'âge, et ramène l'usure à « apres ». Jeu fermé : rien ne s'use, et toute panne est réparée au retour. */
+    pannes: { monte: 2700, repos: 1200, alerte: 0.75, cout: 3, apres: 0.2, partMax: 0.5 },
     /* 0.44 : l'énergie agit. Machines et travailleurs tournent à offre / demande de leur vitesse, jamais en dessous de ce plancher (0,5 : la moitié). 1 : l'énergie ne ralentit rien. */
     plancherEnergie: 0.5,
     /* Construction : tout ce qui se bâtit (extracteur, machine, installation, amélioration), sauf ce qui appartient à un métier d'énergie,
@@ -1722,6 +1724,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🔧 L’usure des machines. Une machine qui travaille longtemps s’use ; à bout, un exemplaire tombe en panne et ne travaille plus (jamais plus de la moitié du parc d’un type à la fois). Un goulot te prévient quand une panne approche et propose d’entretenir ou de réparer contre quelques écus. Jeu fermé, rien ne s’use, et tout est réparé à ton retour.",
     "🔥 Les centrales ont faim. La chaudière, la centrale, la centrale à fission et le réacteur à fusion brûlent un combustible de ta Réserve (charbon, uranium, hélium-3) tant que le jeu est ouvert et que quelque chose travaille. Réserve vide, la source s’arrête et l’énergie baisse : un goulot te le dit (et te prévient quand il reste moins de deux minutes), la page de l’énergie montre combien de temps chaque source tient. Rien ne se perd, ça repart dès que tu as de quoi brûler, et rien ne brûle jeu fermé. Le moulin, la vapeur récupérée et la dynamo n’en veulent pas.",
     "✊ La fatigue et la grève. Chaque métier a une jauge de fatigue : elle monte quand ses travailleurs fabriquent seuls sans relâche (surtout si l’énergie manque), elle descend quand ils se reposent. Tes travailleurs te préviennent quand ils sont à bout ; à fond de jauge, ils se mettent en grève : plus rien ne se fabrique seul dans ce métier, mais ta file de commandes continue et rien n’est perdu. Ils reprennent quand ils ont soufflé, ou tout de suite contre une prime en écus (sur la page du métier ou depuis un goulot). Jeu fermé, ils se reposent : tu ne retrouves jamais une grève à ton retour.",
     "✒️ Typographie : toutes les apostrophes du jeu sont courbes (l’abri, d’os…), les tirets longs disparaissent des textes, et l’âge affiché dans l’en-tête du menu (« Os » au lieu de « Âge de l’Os ») est enfin raccourci comme prévu.",

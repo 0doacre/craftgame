@@ -1744,7 +1744,7 @@
       if (!gs.length) return fam ? "" : "";
       const nom = (id) => (I[id] ? I[id].n.toLowerCase() : id);
       const lignes = gs.map((g) => {
-        const a = g.action, lib = a ? (a.k === "prime" ? "Verser une prime · " + fmt(a.cout) + " écus" : a.k === "embaucher" ? "Embaucher un " + esc(Atel.nom(a.fam, a.kind).toLowerCase()) + " · " + fmt(a.cout) + " écus" : esc(a.label)) : "";
+        const a = g.action, lib = a ? (a.k === "reparer" ? esc(a.label) : a.k === "prime" ? "Verser une prime · " + fmt(a.cout) + " écus" : a.k === "embaucher" ? "Embaucher un " + esc(Atel.nom(a.fam, a.kind).toLowerCase()) + " · " + fmt(a.cout) + " écus" : esc(a.label)) : "";
         return '<li class="goulot is-' + g.kind + '"><span class="goulot-txt">' + esc(g.txt) + (g.bloque.length ? '<span class="tiny muted"> · bloque : ' + esc(g.bloque.slice(0, 4).map(nom).join(", ")) + (g.bloque.length > 4 ? "…" : "") + "</span>" : "") + "</span>" +
           (a ? '<button type="button" class="btn small" data-goulot="' + esc(g.id) + '">' + lib + "</button>" : "") + "</li>";
       }).join("");
@@ -1768,6 +1768,12 @@
           const bat = (S().ateliers || {}).construction, eq = bat && (bat.app || bat.ouv);
           toast("🏗️ Chantier lancé : " + esc(I[a.id].n) + (eq ? ". Tes bâtisseurs s’en occupent." : ". Tu le construis à la main ; embauche un bâtisseur pour qu’il s’en charge."), { key: "emb" });
         } else toast(r.why === "plan" ? "Il manque des matières pour ce chantier : tout est dans la Réserve ou rien ne part." : r.why === "full" ? "La file des commandes est pleine." : "Pas possible pour l’instant.", { key: "emb" });
+        render(true); return;
+      }
+      if (a.k === "reparer") {
+        const r = E.reparer(a.id);
+        if (r.ok) toast("🔧 Machine remise en état : " + fmt(r.cout) + " écus.", { key: "emb" });
+        else toast(r.why === "ecus" ? "Il te manque " + fmt(Math.ceil(r.cout - (S().ecus || 0))) + " écus. Vends au Comptoir ou au Troqueur." : "Rien à réparer pour l’instant.", { key: "emb" });
         render(true); return;
       }
       if (a.k === "prime") {

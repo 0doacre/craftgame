@@ -487,3 +487,42 @@ test("la braise du combustible survit à la sauvegarde", () => {
   F.load(JSON.stringify(E.save ? JSON.parse(E.save()) : E.state));
   assert.ok(Math.abs(F.state.combu.centrale - braise) < 1e-6);
 });
+
+console.log("L'usure et les pannes des machines (0.58)");
+const PN = D.ATELIERS.pannes;
+function jeuMachine() {
+  const E = jeuFatigue();
+  E.state.inv.automate_bois = 2;
+  E.setCadence("manche", 100000, true);
+  return E;
+}
+function avecPannes(r, fn) { const avant = Object.assign({}, PN); Object.assign(PN, r); try { fn(); } finally { Object.assign(PN, avant); } }
+test("une machine qui travaille s'use, tombe en panne, et un goulot propose de la réparer ; rien n'est perdu", () => {
+  avecPannes({ monte: 60 }, () => {
+    const E = jeuMachine();
+    avance(E, 200);
+    const u = E.usure("automate_bois");
+    assert.ok(u.pannes >= 1 && u.pannes <= 1, JSON.stringify(u)); // au plus la moitié du parc
+    const g = E.goulots().find((x) => x.kind === "panne" && x.src === "automate_bois");
+    assert.ok(g && g.action.k === "reparer", JSON.stringify(g));
+    E.state.ecus = 0; assert.equal(E.reparer("automate_bois").why, "ecus");
+    E.state.ecus = 1e6;
+    assert.equal(E.reparer("automate_bois").ok, true);
+    assert.equal(E.usure("automate_bois").pannes, 0);
+  });
+});
+test("rien ne s'use jeu fermé, et les pannes sont réparées au retour", () => {
+  avecPannes({ monte: 60 }, () => {
+    const E = jeuMachine();
+    avance(E, 200);
+    assert.ok(E.usure("automate_bois").pannes >= 1);
+    E.catchUp(600);
+    assert.equal(E.usure("automate_bois").pannes, 0);
+    assert.equal(E.usure("automate_bois").valeur, 0);
+  });
+});
+test("au réglage par défaut, dix minutes de jeu ne cassent rien", () => {
+  const E = jeuMachine();
+  avance(E, 600);
+  assert.equal(E.usure("automate_bois").pannes, 0);
+});
