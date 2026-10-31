@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.60.1";
+  D.VERSION = "0.60.2";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1594,14 +1594,14 @@
     /* les planches d'illustration (assets/travailleurs, 2000 × 1116) : origine (x, y) et taille (w, h) de la première case, pas vertical py entre les deux rangées ; 4 cases par rangée */
     planches: {
       /* 0.60 : les huit métiers ont une rangée de huit portraits (une case par âge) */
-      artisanat: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      construction: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      elevage: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      metallurgie: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      chimie: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      centrales: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      electronique: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
-      artistique: { ligne: true, w: 216, h: 300, W: 1728, H: 300 }
+      artisanat: { w: 216, h: 300, W: 1728, H: 300 },
+      construction: { w: 216, h: 300, W: 1728, H: 300 },
+      elevage: { w: 216, h: 300, W: 1728, H: 300 },
+      metallurgie: { w: 216, h: 300, W: 1728, H: 300 },
+      chimie: { w: 216, h: 300, W: 1728, H: 300 },
+      centrales: { w: 216, h: 300, W: 1728, H: 300 },
+      electronique: { w: 216, h: 300, W: 1728, H: 300 },
+      artistique: { w: 216, h: 300, W: 1728, H: 300 }
     }
   };
   /* 0.56 : le vocabulaire des gestes, métier par métier (affichage seulement, dans le Labo d'un métier). Les gestes gardent leur identifiant et leur nom général
@@ -1725,6 +1725,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🧑‍🔧 Les portraits des travailleurs changent de nom de fichier : un téléphone qui garde un ancien morceau du jeu ne mélange plus ancien code et nouvelles images (le forgeron apparaissait en double).",
     "🏷️ Au Labo, le « poste » devient la « station » (Mains, Feu de camp, Enclume…) : « ← Stations et outils », « Choisir cette station », « sur cette station ». L’établi reste la surface où tu poses tes matières.",
     "🧑‍🔧 De nouveaux visages pour les travailleurs. Les huit métiers ont maintenant un même personnage qui traverse les âges, du Néolithique au futur : une personne par métier, reconnaissable d’un échelon à l’autre.",
     "⭐ Les goulots suivent ton objectif : ceux qui touchent l’objet que tu suis passent devant, marqués d’une étoile. Les textes qui parlaient encore d’« action » disent « geste » (fiches des stations, conseils, Labo), et l’ancien conseil sur « la part réservée de l’apprenti » décrit enfin les travailleurs d’aujourd’hui.",
