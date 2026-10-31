@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.59.1";
+  D.VERSION = "0.60.0";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1593,14 +1593,15 @@
     },
     /* les planches d'illustration (assets/travailleurs, 2000 × 1116) : origine (x, y) et taille (w, h) de la première case, pas vertical py entre les deux rangées ; 4 cases par rangée */
     planches: {
-      artisanat: { x: 235, y: 140, w: 385, h: 435, py: 445 },
-      construction: { x: 470, y: 145, w: 375, h: 450, py: 455 },
-      elevage: { x: 40, y: 135, w: 485, h: 430, py: 450 },
+      /* 0.60 : sept métiers ont une rangée de huit portraits (une case par âge) ; la métallurgie garde son ancienne planche en grille */
+      artisanat: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
+      construction: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
+      elevage: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
       metallurgie: { x: 70, y: 150, w: 490, h: 410, py: 435 },
-      chimie: { x: 55, y: 145, w: 490, h: 420, py: 450 },
-      centrales: { x: 90, y: 150, w: 460, h: 445, py: 460 },
-      electronique: { x: 40, y: 150, w: 490, h: 410, py: 435 },
-      artistique: { x: 35, y: 140, w: 483, h: 420, py: 430 }
+      chimie: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
+      centrales: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
+      electronique: { ligne: true, w: 216, h: 300, W: 1728, H: 300 },
+      artistique: { ligne: true, w: 216, h: 300, W: 1728, H: 300 }
     }
   };
   /* 0.56 : le vocabulaire des gestes, métier par métier (affichage seulement, dans le Labo d'un métier). Les gestes gardent leur identifiant et leur nom général
@@ -1724,6 +1725,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🧑‍🔧 De nouveaux visages pour les travailleurs. Sept métiers (artisanat, construction, élevage, chimie, centrales, électronique, arts et lettres) ont maintenant un même personnage qui traverse les âges, du Néolithique au futur : une personne par métier, reconnaissable d’un échelon à l’autre. Le forgeron garde son ancienne planche en attendant la sienne.",
     "⭐ Les goulots suivent ton objectif : ceux qui touchent l’objet que tu suis passent devant, marqués d’une étoile. Les textes qui parlaient encore d’« action » disent « geste » (fiches des stations, conseils, Labo), et l’ancien conseil sur « la part réservée de l’apprenti » décrit enfin les travailleurs d’aujourd’hui.",
     "🔧 L’usure des machines. Une machine qui travaille longtemps s’use ; à bout, un exemplaire tombe en panne et ne travaille plus (jamais plus de la moitié du parc d’un type à la fois). Un goulot te prévient quand une panne approche et propose d’entretenir ou de réparer contre quelques écus. Jeu fermé, rien ne s’use, et tout est réparé à ton retour.",
     "🔥 Les centrales ont faim. La chaudière, la centrale, la centrale à fission et le réacteur à fusion brûlent un combustible de ta Réserve (charbon, uranium, hélium-3) tant que le jeu est ouvert et que quelque chose travaille. Réserve vide, la source s’arrête et l’énergie baisse : un goulot te le dit (et te prévient quand il reste moins de deux minutes), la page de l’énergie montre combien de temps chaque source tient. Rien ne se perd, ça repart dès que tu as de quoi brûler, et rien ne brûle jeu fermé. Le moulin, la vapeur récupérée et la dynamo n’en veulent pas.",

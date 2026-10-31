@@ -1707,6 +1707,7 @@
       if (!P) return "";
       const ech = ECH_PLANCHE[Math.max(0, Math.min(6, (Atel.carte(fam) || {}).echelon || 0))], col = ech % 4, row = Math.floor(ech / 4);
       const W = 112, s = W / P.w;
+      if (P.ligne) return '<span class="voix-portrait" aria-hidden="true" style="width:' + W + "px;height:" + Math.round(P.h * s) + "px;background-image:url(assets/travailleurs/planche-" + fam + ".jpg);background-size:" + Math.round(P.W * s) + "px " + Math.round(P.H * s) + "px;background-position:-" + Math.round(ech * P.w * s) + 'px 0"></span>';
       return '<span class="voix-portrait" aria-hidden="true" style="width:' + W + "px;height:" + Math.round(P.h * s) + "px;background-image:url(assets/travailleurs/planche-" + fam + ".jpg);background-size:" + Math.round(2000 * s) + "px " + Math.round(1116 * s) + "px;background-position:-" + Math.round((P.x + col * P.w) * s) + "px -" + Math.round((P.y + row * P.py) * s) + 'px"></span>';
     }
     function voixFerme() {
