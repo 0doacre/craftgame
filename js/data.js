@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.61.0";
+  D.VERSION = "0.62.0";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1484,13 +1484,13 @@
   D.ATELIERS = {
     familles: [
     { id: "artisanat", n: "Artisanat", ic: "🪵", d: "Le bois, les fibres, le verre, la brique." },
-    { id: "construction", n: "Construction", ic: "🏗️", d: "Les extracteurs, les machines, les installations, les améliorations." },
-    { id: "elevage", n: "Élevage", ic: "🐑", d: "Ce que laissent les bêtes : os, cuir, laine." },
+    { id: "construction", n: "Bâtiment", ic: "🏗️", d: "Les extracteurs, les machines, les installations, les améliorations." },
+    { id: "elevage", n: "Subsistance", ic: "🐑", d: "Ce que laissent les bêtes : os, cuir, laine." },
     { id: "metallurgie", n: "Métallurgie", ic: "⚒️", d: "Les métaux, du cuivre à l’uranium." },
     { id: "chimie", n: "Chimie et matériaux", ic: "⚗️", d: "Le pétrole, les plastiques, les composites." },
-    { id: "centrales", n: "Centrales", ic: "⚡", d: "L’énergie, de la bête de trait à la fusion." },
-    { id: "electronique", n: "Électronique", ic: "🔌", d: "Des circuits aux processeurs et aux robots." },
-    { id: "artistique", n: "Arts et lettres", ic: "✒️", d: "L’écriture, l’encre, la musique." }
+    { id: "centrales", n: "Énergie", ic: "⚡", d: "L’énergie, de la bête de trait à la fusion." },
+    { id: "electronique", n: "Technologie", ic: "🔌", d: "Des circuits aux processeurs et aux robots." },
+    { id: "artistique", n: "Culture et savoir", ic: "✒️", d: "L’écriture, l’encre, la musique." }
   ],
     de: {
     artisanat: "manche corde archet torche eclat engrenage_bois brique brique_refr verre poudre_quartz lentille verre_trempe roue",
@@ -1585,11 +1585,11 @@
       chimie: { retour: "Patron, les cornues ont travaillé en votre absence : {liste}.", manque: "Patron, nous manquons {de} au laboratoire !", prevision: "Patron, nous allons bientôt manquer {de} au laboratoire.",
         fatigue: "Patron, nous avons les mains qui tremblent : il faut ralentir.", greve: "Patron, le laboratoire ferme boutique : grève des chimistes !", reprise: "Patron, le laboratoire reprend ses distillations." },
       centrales: { retour: "Patron, la centrale a tourné sans vous : {liste}.", manque: "Patron, la centrale manque {de} !", prevision: "Patron, la centrale va bientôt manquer {de}.",
-        fatigue: "Patron, les équipes de la centrale sont à bout.", greve: "Patron, la centrale tourne au ralenti : les centraliers font grève !", reprise: "Patron, la centrale reprend son service." },
+        fatigue: "Patron, les équipes de la centrale sont à bout.", greve: "Patron, la centrale tourne au ralenti : les opérateurs font grève !", reprise: "Patron, la centrale reprend son service." },
       electronique: { retour: "Patron, pendant votre absence, nous avons assemblé : {liste}.", manque: "Patron, il n’y a plus {de} pour les circuits !", prevision: "Patron, nous allons bientôt manquer {de}.",
-        fatigue: "Patron, les yeux piquent sur les circuits : une pause s’impose.", greve: "Patron, les électroniciens débranchent : grève !", reprise: "Patron, les établis électroniques se rallument." },
+        fatigue: "Patron, les yeux piquent sur les circuits : une pause s’impose.", greve: "Patron, les ingénieurs débranchent : grève !", reprise: "Patron, les établis électroniques se rallument." },
       artistique: { retour: "Patron, le scriptorium a produit en votre absence : {liste}.", manque: "Patron, le scriptorium manque {de} !", prevision: "Patron, bientôt le scriptorium manquera {de}.",
-        fatigue: "Patron, les plumes tremblent : le scriptorium est à bout.", greve: "Patron, le scriptorium se tait : les lettrés font grève !", reprise: "Patron, les lettrés reprennent la plume." }
+        fatigue: "Patron, les plumes tremblent : le scriptorium est à bout.", greve: "Patron, le scriptorium se tait : les érudits font grève !", reprise: "Patron, les érudits reprennent la plume." }
     },
     /* les planches d'illustration (assets/travailleurs, 2000 × 1116) : origine (x, y) et taille (w, h) de la première case, pas vertical py entre les deux rangées ; 4 cases par rangée */
     planches: {
@@ -1644,9 +1644,9 @@
       elevage: { apprenti: "Apprenti éleveur", ouvrier: "Éleveur" },
       metallurgie: { apprenti: "Apprenti forgeron", ouvrier: "Forgeron" },
       chimie: { apprenti: "Apprenti chimiste", ouvrier: "Chimiste" },
-      centrales: { apprenti: "Apprenti centralier", ouvrier: "Centralier" },
-      electronique: { apprenti: "Apprenti électronicien", ouvrier: "Électronicien" },
-      artistique: { apprenti: "Apprenti copiste", ouvrier: "Lettré" }
+      centrales: { apprenti: "Apprenti opérateur", ouvrier: "Opérateur" },
+      electronique: { apprenti: "Apprenti ingénieur", ouvrier: "Ingénieur" },
+      artistique: { apprenti: "Apprenti copiste", ouvrier: "Érudit" }
     },
     apprenti: { n: "Apprenti", age: 3, mult: 0.5, ing: 2, ch: 1, cout: 40, croiss: 1.5, max: 3 },
     ouvrier: { n: "Ouvrier", age: 6, mult: 1, ing: 3, ch: 3, cout: 200, croiss: 1.5, max: 8 }
@@ -1725,6 +1725,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🏷️ Les métiers changent de nom : Subsistance (l’ancien Élevage), Bâtiment (Construction), Énergie (Centrales), Technologie (Électronique), Culture et savoir (Arts et lettres). Leurs travailleurs aussi : opérateur, ingénieur, érudit. Artisanat, Métallurgie et Chimie gardent le leur. Ta partie n’est pas touchée.",
     "🏷️ Passe de vocabulaire. Un seul mot par chose : « ressource » partout (plus de « matière »), « essayer » et « essai » (plus de « tenter »), des « consignes » pour garder une réserve (plus de « stock » ni de « cadence »). Les paliers du seuil deviennent « À l’arrêt » et « Quelques provisions », la découverte se fait toujours « au Labo », et les voix des travailleurs ne parlent plus de « l’atelier ». Les anciens textes de l’apprenti à l’établi sont retirés.",
     "🧑‍🔧 Les portraits des travailleurs changent de nom de fichier : un téléphone qui garde un ancien morceau du jeu ne mélange plus ancien code et nouvelles images (le forgeron apparaissait en double).",
     "🏷️ Au Labo, le « poste » devient la « station » (Mains, Feu de camp, Enclume…) : « ← Stations et outils », « Choisir cette station », « sur cette station ». L’établi reste la surface où tu poses tes matières.",

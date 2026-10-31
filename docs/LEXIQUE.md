@@ -35,7 +35,7 @@ Dernière refonte : 0.61 (passe de vocabulaire du 31 octobre 2026, réponses du 
 
 | Mot | Sens |
 |---|---|
-| **Métier** | Une famille de recettes : Artisanat, Élevage, Métallurgie, Chimie, Centrales, Électronique, Arts et lettres, Construction. Les noms de métiers et de travailleurs ci-dessous sont **en cours de révision** (question 14 de la passe). |
+| **Métier** | Une famille de recettes : Artisanat, Élevage, Métallurgie, Chimie, Centrales, Électronique, Arts et lettres, Construction. Depuis la 0.62 : Artisanat (artisan), **Subsistance** (éleveur), Métallurgie (forgeron), Chimie (chimiste), **Bâtiment** (bâtisseur), **Énergie** (opérateur), **Technologie** (ingénieur), **Culture et savoir** (érudit). Les anciens noms (Élevage, Construction, Centrales, Électronique, Arts et lettres) ne s’emploient plus. |
 | **Geste** | Tailler, Tresser, Chauffer, Construire… Partout dans l’interface ; au Labo, chaque métier a ses mots pour les gestes (`D.GESTES_METIER`). Jamais « action » ni « mode ». |
 | **Recette** | Un geste, appliqué à une à trois ressources. On la **découvre** au Labo et on **essaie** : un **essai** réussi la révèle. |
 | **Travailleurs** | Apprentis, puis ouvriers, **embauchés** en écus dans un métier. Nommés d’après ce qu’ils font (`D.TRAVAILLEURS.noms`). |
@@ -106,5 +106,4 @@ Apostrophes courbes (’), pas de tiret long hors des commentaires et du journal
 ## En attente de décision
 
 - **Le Domaine** : dans l’interface c’est « les Terres ». Le porteur propose que le lieu du joueur porte **un nom qui change à chaque âge** (Campement, Halte, Foyer ou Hameau, Village, Oppidum, Cité, Ville, Métropole, Complexe, Mégalopole) à la place de « Domaine » dans le récit et les réglages. À instruire (qui porte le nom ? combien d’âges ?).
-- **Les noms des métiers et des travailleurs** : trois jeux de propositions du porteur à départager (voir `docs/revue/decisions-metiers-0-42.md`, section finale).
 - **Les textes de découverte** (`D.SAVEUR`, `D.SAVEUR_GESTE`) : 0 sur 218 écrits.
