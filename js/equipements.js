@@ -39,7 +39,7 @@
       four: { n: "Four en argile", item: "four", family: "chauffe", tier: 2 },
       // plus des outils de départ : leurs recettes passent par l'Atelier (un seul usage chacun). Les objets restent des outils.
       pioche_pierre: { n: "Pioche de pierre", item: "pioche_pierre", family: "taille", hidden: true },
-      enclume_pierre: { n: "Poste de frappe", item: "enclume_pierre", requires: { percuteur_pierre: 1 }, family: "frappe", hidden: true },
+      enclume_pierre: { n: "Station de frappe", item: "enclume_pierre", requires: { percuteur_pierre: 1 }, family: "frappe", hidden: true },
       ciseau: { n: "Ciseau de cuivre", item: "ciseau", family: "taille", hidden: true },
       polissoir: { n: "Dalle de polissage", item: "polissoir", family: "abrasion", hidden: true }
     };
@@ -172,11 +172,11 @@
           heat: "brulant",
           label: "🔥 Brûlant",
           text: diffTool
-            ? "Les matières sont exactes sur ce poste, mais il te faut un autre outil (" + cfg.equipment[c.equipment].n + ")."
+            ? "Les matières sont exactes sur cette station, mais il te faut un autre outil (" + cfg.equipment[c.equipment].n + ")."
             : "Les matières et l’outil sont exacts : essaie une autre allure ou un autre geste de cet outil."
         };
       }
-      // 2. Correspondance exacte sur un autre poste
+      // 2. Correspondance exacte sur un autre station
       const otherPlace = Object.keys(cfg.recipes).filter(id => E.ageOK(id) && Object.keys(E.item(id).r[1]).sort().join(",") === key);
       if (otherPlace.length) {
         const c = cfg.recipes[otherPlace[0]][0];
@@ -184,7 +184,7 @@
         return {
           heat: "chaud",
           label: "🌡️ Chaud",
-          text: "Ces matières forment bien une recette de ton âge, mais sur un autre poste (" + targetPlace + ")."
+          text: "Ces matières forment bien une recette de ton âge, mais sur une autre station (" + targetPlace + ")."
         };
       }
       // 3. Ingrédient superflu : bonnes matières pour cet outil et ce geste, mais matière en trop

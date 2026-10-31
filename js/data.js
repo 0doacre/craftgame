@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.60.0";
+  D.VERSION = "0.60.1";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1725,6 +1725,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🏷️ Au Labo, le « poste » devient la « station » (Mains, Feu de camp, Enclume…) : « ← Stations et outils », « Choisir cette station », « sur cette station ». L’établi reste la surface où tu poses tes matières.",
     "🧑‍🔧 De nouveaux visages pour les travailleurs. Les huit métiers ont maintenant un même personnage qui traverse les âges, du Néolithique au futur : une personne par métier, reconnaissable d’un échelon à l’autre.",
     "⭐ Les goulots suivent ton objectif : ceux qui touchent l’objet que tu suis passent devant, marqués d’une étoile. Les textes qui parlaient encore d’« action » disent « geste » (fiches des stations, conseils, Labo), et l’ancien conseil sur « la part réservée de l’apprenti » décrit enfin les travailleurs d’aujourd’hui.",
     "🔧 L’usure des machines. Une machine qui travaille longtemps s’use ; à bout, un exemplaire tombe en panne et ne travaille plus (jamais plus de la moitié du parc d’un type à la fois). Un goulot te prévient quand une panne approche et propose d’entretenir ou de réparer contre quelques écus. Jeu fermé, rien ne s’use, et tout est réparé à ton retour.",

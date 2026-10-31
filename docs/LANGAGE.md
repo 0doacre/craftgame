@@ -10,6 +10,7 @@ Les mots que le joueur lit. Un mot par chose ; `tools/test-langage.js` refuse le
 | **Atelier** (l'écran) | | on y produit : Produire, Carnet, Machines |
 | **Métier** | atelier (pour Artisanat, Métallurgie…) | la page de l'Atelier qui les liste s'appelle Métiers |
 | **Progression** | l'Arbre | le Chemin, les Secrets, les Gestes, les Fins, la Mémoire, le Cosmos |
+| **Station** (au Labo : Mains, Feu de camp, Enclume…) | poste, poste de travail | « Poste radio » et « Poste à moteur électrique » restent des noms d'objets ; l'**établi** est la surface où l'on pose les matières |
 | **Geste** | action | Tailler, Tresser… ; au Labo, chaque métier a ses mots (`D.GESTES_METIER`) |
 | **Pièce** | composant | un objet fabriqué qui sert à en fabriquer d'autres |
 | **Souvenirs** | Traces | ce que laissent les passages |

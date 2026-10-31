@@ -20,7 +20,7 @@
       const it=E.D.ITEMS[step],b=it?.r&&E.blocker(step);
       if(b&&b.why!=="owned"&&b.why!=="equipment"){
         const station=E.blockStation(step,b);
-        return {...base,state:"station",text:b.why==="heat"?"La chaleur disponible est insuffisante pour cette étape.":"Un poste ou un geste requis manque pour cette étape.",action:station&&known(E,station)?{kind:"item",id:station,label:"Voir "+name(E,station)}:{kind:"tab",id:"atelier",label:"Voir l’Atelier"}};
+        return {...base,state:"station",text:b.why==="heat"?"La chaleur disponible est insuffisante pour cette étape.":"Une station ou un geste requis manque pour cette étape.",action:station&&known(E,station)?{kind:"item",id:station,label:"Voir "+name(E,station)}:{kind:"tab",id:"atelier",label:"Voir l’Atelier"}};
       }
       const eq=E.equipmentJobCheck&&E.equipmentJobCheck(step,raw,id=>E.count(id)+(raw.b?.[id]||0));
       if(eq)return {...base,state:"equipment",text:"Un outil requis n’est plus disponible.",action:known(E,eq.required)?{kind:"item",id:eq.required,label:"Voir "+name(E,eq.required)}:{kind:"tab",id:"atelier",label:"Voir les outils"}};

@@ -28,10 +28,10 @@
       const cur=currencyName();
       const help={
         study:"Étudier les matières déjà vues en dépensant l’Intuition indiquée",
-        place:"Choisir ce poste de travail",
+        place:"Choisir cette station",
         legacy:"Utiliser les procédés des âges après le Cuivre",
         slot:"Poser ou retirer une matière dans cet emplacement",
-        prepare:"Préparer les matières, le poste et l’outil pour : "+name(value),
+        prepare:"Préparer les matières, la station et l’outil pour : "+name(value),
         order:"Fabriquer : "+name(value)+", en préparant les composants manquants",
         order_missing:"Façonner les sous-composants manquants depuis la réserve",
         clear:"Retirer toutes les matières de l’établi et les remettre en réserve",
@@ -260,7 +260,7 @@
           return '<div class="ae-cad-card"><div class="ae-cad-info">'+icon(c.id,"sm")+'<div class="ae-cad-names"><b>'+esc(name(c.id))+'</b><span class="ae-cad-stock">'+(api.fmt?api.fmt(c.have):c.have)+' / '+(api.fmt?api.fmt(c.cap):c.cap)+'</span></div><div>'+stBadge+'</div></div><div class="ae-cad-acts">'+button("cadence_toggle",c.id,c.on?"⏸️":"▶️","mini ghost")+button("cadence_cap",c.id,c.cap+" ▾","mini ghost")+button("cadence_del",c.id,"✕","mini ghost")+'</div></div>';
         }).join('')+'</div></details></section>';
       }
-      if(known.length)h+='<section class="card"><details class="ae-known-details" open><summary class="ae-eco-summary" title="Afficher ou replier les recettes déjà maîtrisées sur ce poste"><h3>Recettes déjà maîtrisées sur ce poste ('+known.length+')</h3><span class="small muted">Fabrication rapide</span></summary><div class="ae-known">'+known.map(id=>{
+      if(known.length)h+='<section class="card"><details class="ae-known-details" open><summary class="ae-eco-summary" title="Afficher ou replier les recettes déjà maîtrisées sur cette station"><h3>Recettes déjà maîtrisées sur cette station ('+known.length+')</h3><span class="small muted">Fabrication rapide</span></summary><div class="ae-known">'+known.map(id=>{
         const canCadence=E.automatable&&E.automatable(id)&&(E.hasEchoFin("retour")||!(D.COMMANDES?.firstByHand)||(s.made[id]>0));
         const cad=s.dom?.cadence?.[id];
         const c=cadsMap[id];
@@ -431,7 +431,7 @@
         }
       }
       else if(action==="build"){E.learn("etabli_amenage",true);message=E.order("etabli_amenage",1).ok?"Aménagement en cours.":"Consulte les matériaux requis dans le Carnet.";}
-      else if(action==="hire")message=E.workerHire().ok?"L’apprenti rejoint ton établi.":"Aménage le poste, prépare l’outil et prépare l’accueil avec tes surplus.";
+      else if(action==="hire")message=E.workerHire().ok?"L’apprenti rejoint ton établi.":"Aménage la station, prépare l’outil et prépare l’accueil avec tes surplus.";
       else if(action==="fund")message=E.workerFund(1).ok?"1 part réservée pour l’apprenti.":"Il faut 1 part disponible dans ta bourse.";
       else if(action==="fund5")message=E.workerFund(5).ok?"5 parts réservées pour l’apprenti.":"Il faut 5 parts disponibles dans ta bourse.";
       else if(action==="worker")E.workerSet(!E.atelierEconomyInfo().working);

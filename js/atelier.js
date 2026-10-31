@@ -59,7 +59,7 @@
       if (Equipped && st.age < 3) U.equipmentLegacy = false;
       if (Equipped && !U.equipmentLegacy) return Equipped.laboView();
       const rt = recettesTrouvees();
-      let h = '<div class="labo"><div class="labo-tete">' + (Equipped ? '<button type="button" class="btn small ghost" data-ae="legacy" data-value="0">← Postes et outils</button>' : "") + '<button type="button" class="labo-compteur" data-tab2="carnet" title="Ouvrir le Carnet : toutes tes recettes trouvées">Recettes trouvées · ' + rt.n + " / " + rt.total + "</button></div>";
+      let h = '<div class="labo"><div class="labo-tete">' + (Equipped ? '<button type="button" class="btn small ghost" data-ae="legacy" data-value="0">← Stations et outils</button>' : "") + '<button type="button" class="labo-compteur" data-tab2="carnet" title="Ouvrir le Carnet : toutes tes recettes trouvées">Recettes trouvées · ' + rt.n + " / " + rt.total + "</button></div>";
       if (!E.gesteOK(U.geste)) U.geste = "tailler";
       if (!(st.stats.crafts > 0) && !Tuto.active()) h += '<div class="tip">1. Choisis un <b>geste</b>. 2. Pose des <b>ressources</b> sur l’établi. 3. Lance le geste. Pour commencer : <b>Tailler</b> + <b>Bois</b>.</div>';
       // Le premier essai reste possible sans un aller-retour au Domaine.
@@ -343,7 +343,7 @@
       return body && U.last && S().stats.crafts >= 3 ? body + '<button class="btn small ghost result-x" data-resclose aria-label="Réduire le résultat">▴ Réduire</button>' : body;
     }
     function resultBody(r) {
-      if(r&&r.kind==="equipment")return '<p>Pour cette fabrication, choisis le poste et l’outil : touche « ← Postes et outils ».</p>';
+      if(r&&r.kind==="equipment")return '<p>Pour cette fabrication, choisis la station et l’outil : touche « ← Stations et outils ».</p>';
       if (!r && S().stats.crafts >= 3) return ""; // déjà appris : la carte vide ne garde pas sa place (voir .result:empty)
       if (!r) return '<p class="small muted">Choisis un geste, pose jusqu’à trois ressources, puis lance-le. Le <b>thermomètre</b> indique si tu approches d’une recette.</p>';
       if (r.kind === "craft") {

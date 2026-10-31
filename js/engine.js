@@ -4132,7 +4132,7 @@
       outils: {
         kicker: "Atelier équipé",
         titre: "Outils et gestes du métier",
-        texte: "Chaque poste et outil propose des modes de travail précis (tailler, couper, cuire, polir). Un outil plus affûté ou mieux adapté, comme le couteau de silex pour les lanières, divise le temps de fabrication sans consommer plus de matières par pièce."
+        texte: "Chaque station et outil propose des modes de travail précis (tailler, couper, cuire, polir). Un outil plus affûté ou mieux adapté, comme le couteau de silex pour les lanières, divise le temps de fabrication sans consommer plus de matières par pièce."
       }
     };
     /* Pose un extracteur libre sur le gisement de sa terre où il manque le plus.

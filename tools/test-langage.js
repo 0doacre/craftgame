@@ -26,7 +26,11 @@ const INTERDITS = [
   ["L’atelier est au complet", "un atelier du jeu est un métier"],
   ["← Ateliers", "la page s'appelle Métiers"],
   ["dans le Domaine", "l'onglet s'appelle Terres", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js"]],
-  ["sur la Carte)", "la Carte s'appelle l'Atlas"]
+  ["sur la Carte)", "la Carte s'appelle l'Atlas"],
+  ["Postes et outils", "au Labo, on dit stations"],
+  ["poste de travail", "au Labo, on dit station"],
+  ["sur ce poste", "au Labo, on dit station"],
+  ["sur un autre poste", "au Labo, on dit station"]
 ];
 console.log("Langage du jeu (0.56.1)");
 test("aucune formule d'avant dans les textes lus par le joueur", () => {
