@@ -1411,10 +1411,23 @@
      * (offre / demande, au plus 1, au moins D.ATELIERS.plancherEnergie) ralentit machines et travailleurs, jamais les mains.
      * Recalculé une fois par seconde de jeu à partir du pool déjà assigné (pas d'appel à assignWorkers : pas de récursion). */
     let energieCache = 1, energieT = 0;
+    /* 0.58 : une source à combustible marche tant qu'il lui reste de quoi brûler (une unité en réserve, ou la braise de la précédente) */
+    function sourceMarche(id) {
+      const f = (D.ATELIERS.combustibles || {})[id];
+      if (!f) return true;
+      return (S.inv[f.id] || 0) >= 1 || ((S.combu || {})[id] || 0) > 0;
+    }
+    E.sourceMarche = sourceMarche;
+    /* secondes de marche restantes (réserve + braise), Infinity pour une source sans combustible */
+    E.sourceReste = (id) => {
+      const f = (D.ATELIERS.combustibles || {})[id];
+      if (!f) return Infinity;
+      return Math.floor(S.inv[f.id] || 0) * f.s + ((S.combu || {})[id] || 0) * f.s;
+    };
     function energieRecalc() {
       const T = D.ATELIERS;
       let offre = T.baseCh;
-      T.sources.forEach((s) => { if (count(s.id) > 0) offre += s.ch; });
+      T.sources.forEach((s) => { if (count(s.id) > 0 && sourceMarche(s.id)) offre += s.ch; });
       const ch = {};
       T.paliers.forEach((p) => { ch[p.id] = p.ch; });
       let demande = 0;
@@ -1689,6 +1702,24 @@
     }
     /* 0.57 : la fatigue des métiers et la grève (D.TRAVAILLEURS.fatigue). Rien ne bouge quand le jeu est fermé : les travailleurs se reposent (voir catchUp). */
     function annonce(fam, kind) { const e = eq(); e.annonces = (e.annonces || []).concat({ fam, kind }).slice(-8); }
+    /* 0.58 : le combustible. Chaque source construite brûle sa part tant que quelque chose travaille ; rien ne brûle jeu fermé. */
+    function combustionStep(dt) {
+      const C = D.ATELIERS.combustibles;
+      if (!C || !machPool.some((w) => w.job !== null || w.cad !== null)) return;
+      const bien = S.combu || (S.combu = {});
+      D.ATELIERS.sources.forEach((s) => {
+        const f = C[s.id];
+        if (!f || count(s.id) <= 0) return;
+        let reste = bien[s.id] || 0;
+        if (reste <= 0) {
+          if ((S.inv[f.id] || 0) < 1) return; // plus rien à brûler : arrêtée
+          S.inv[f.id] -= 1; reste = 1;
+        }
+        reste -= dt / f.s;
+        if (reste < 0) reste = 0;
+        bien[s.id] = reste;
+      });
+    }
     function fatigueStep(dt) {
       const F = TRAV.fatigue;
       if (!F || !autoPossible() || !S.ateliers) return;
@@ -1841,6 +1872,15 @@
       if (energieCache < 0.999 && machPool.some((w) => (w.job !== null || w.cad !== null))) {
         liste["energie:-"] = { id: "energie:-", kind: "energie", fam: null, ing: null, fams: [], bloque: [], poids: 1, pct: Math.round(energieCache * 100) };
       }
+      /* 0.58 : une source qui brûle un combustible et qui n'en a plus (ou presque plus) */
+      const CB = D.ATELIERS.combustibles || {};
+      D.ATELIERS.sources.forEach((s) => {
+        const f = CB[s.id];
+        if (!f || count(s.id) <= 0 || !machPool.some((w) => w.job !== null || w.cad !== null)) return;
+        const reste = E.sourceReste(s.id);
+        if (reste > D.ATELIERS.combustibleAlerte) return;
+        liste["combu:" + s.id] = { id: "combu:" + s.id, kind: "combustible", fam: null, ing: f.id, ings: [], fams: [], bloque: [], poids: 4, src: s.id, arret: reste <= 0, reste: Math.ceil(reste) };
+      });
       const nom = (id) => ((item(id) && item(id).n) || id).toLowerCase();
       const maj = (s) => s.charAt(0).toUpperCase() + s.slice(1);
       const F = (f) => { const x = ((D.ATELIERS || {}).familles || []).find((y) => y.id === f); return x ? x.n : f; };
@@ -1871,6 +1911,11 @@
         else if (g.kind === "seuil0") { txt = F(g.fam) + " est au repos : on n’y fabrique rien seul"; action = { k: "metier", fam: g.fam, label: "Régler le seuil" }; }
         else if (g.kind === "seuil") { txt = maj(n) + " est au seuil de " + F(g.fam) + " et il en faut plus"; action = { k: "metier", fam: g.fam, label: "Monter le seuil" }; }
         else if (g.kind === "greve") { txt = F(g.fam) + " : les travailleurs sont en grève, ils ne fabriquent plus rien seuls"; action = { k: "prime", fam: g.fam, cout: E.primeCout(g.fam), label: "Verser une prime" }; }
+        else if (g.kind === "combustible") {
+          const src = (item(g.src) && item(g.src).n || g.src).toLowerCase();
+          txt = g.arret ? "La " + src + " est à l’arrêt : plus de " + nom(g.ing) + " en réserve" : "La " + src + " n’a plus que " + g.reste + " s de " + nom(g.ing);
+          action = { k: "terres", id: g.ing, label: "Voir les Terres" };
+        }
         else if (g.kind === "energie") { txt = "L’énergie manque : travailleurs et machines tournent à " + g.pct + " %"; action = { k: "energie", label: "Voir l’énergie" }; }
         return Object.assign(g, { txt, action });
       }).sort((a, b) => (b.kind === "energie") - (a.kind === "energie") || b.poids - a.poids || a.id.localeCompare(b.id));
@@ -5530,7 +5575,7 @@
       workStep(dt, offline);
       if(E.atelierEconomyStep)E.atelierEconomyStep(dt);
       runCadences(dt, c);
-      if (!offline) fatigueStep(dt);
+      if (!offline) { combustionStep(dt); fatigueStep(dt); }
       pullOrderInputs();
       if (!offline && c.pip > 0) {
         S.pipAcc += c.pip * dt;

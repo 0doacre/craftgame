@@ -19,7 +19,12 @@
     function energie() {
       let offre = T.baseCh;
       const sources = [{ id: "bete", n: "Bête de trait", ch: T.baseCh }];
-      T.sources.forEach((s) => { if (E.count(s.id) > 0) { offre += s.ch; sources.push({ id: s.id, n: I[s.id] ? I[s.id].n : s.id, ch: s.ch }); } });
+      T.sources.forEach((s) => {
+        if (E.count(s.id) <= 0) return;
+        const cb = (T.combustibles || {})[s.id], marche = E.sourceMarche(s.id);
+        if (marche) offre += s.ch;
+        sources.push({ id: s.id, n: I[s.id] ? I[s.id].n : s.id, ch: s.ch, arret: !marche, brule: cb ? (I[cb.id] ? I[cb.id].n : cb.id).toLowerCase() : null, reste: cb ? Math.ceil(E.sourceReste(s.id)) : null });
+      });
       const ms = E.machines();
       let demande = 0;
       T.paliers.forEach((p) => { const m = ms[p.id]; if (m) demande += m.used * p.ch; });

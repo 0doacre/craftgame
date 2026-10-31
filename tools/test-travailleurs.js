@@ -431,3 +431,59 @@ test("au réglage par défaut (« au jour le jour »), deux heures de jeu ne mè
   E.embaucher("artisanat", "apprenti"); E.embaucher("artisanat", "apprenti");
   for (let i = 0; i < 24; i++) { avance(E, 300); assert.equal(E.fatigue("artisanat").greve, false, "grève à la minute " + i * 5); }
 });
+
+console.log("Le combustible des sources d'énergie (0.58)");
+const CB = D.ATELIERS.combustibles;
+test("la chaudière, la centrale, la fission et la fusion brûlent un combustible ; moulin, dynamo et vapeur récupérée n'en veulent pas", () => {
+  for (const id of ["chaudiere_tubulaire", "centrale", "centrale_fission", "reacteur_fusion"]) { assert.ok(CB[id] && D.ITEMS[CB[id].id] && CB[id].s > 0, id); assert.ok(D.ATELIERS.sources.some((s) => s.id === id)); }
+  for (const id of ["moulin", "dynamo", "recuperation_vapeur"]) assert.equal(CB[id], undefined);
+});
+test("une centrale qui a du charbon fournit ; elle brûle une unité toutes les s secondes quand quelque chose travaille", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 10;
+  E.energieRecalc();
+  assert.ok(E.sourceMarche("centrale"));
+  const c0 = E.state.inv.charbon;
+  avance(E, CB.centrale.s * 3 + 1);
+  assert.ok(c0 - E.state.inv.charbon >= 3 && c0 - E.state.inv.charbon <= 4, "brûlé : " + (c0 - E.state.inv.charbon));
+  assert.ok(E.sourceReste("centrale") > 0);
+});
+test("réserve vide : la centrale s'arrête, un goulot le dit, rien n'est perdu, et elle repart dès qu'il y a du charbon", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 2;
+  avance(E, CB.centrale.s * 4);
+  assert.equal(E.state.inv.charbon, 0);
+  assert.equal(E.sourceMarche("centrale"), false);
+  const g = E.goulots().find((x) => x.kind === "combustible" && x.src === "centrale");
+  assert.ok(g && g.arret && g.action.k === "terres" && g.ing === "charbon", JSON.stringify(g));
+  E.add("charbon", 5);
+  assert.equal(E.sourceMarche("centrale"), true);
+  E.energieRecalc();
+  assert.ok(E.energieFacteur() >= 0.5);
+});
+test("l'énergie retombe quand la source s'arrête, jamais sous le plancher ; et rien ne brûle jeu fermé", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 1;
+  const c0 = E.state.inv.charbon;
+  E.catchUp(3600);
+  assert.equal(E.state.inv.charbon, c0, "jeu fermé : le charbon n'a pas brûlé");
+  assert.ok(E.energieFacteur() >= D.ATELIERS.plancherEnergie);
+});
+test("quand il reste peu de secondes de combustible, le goulot prévient avant l'arrêt", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 3;
+  avance(E, 5);
+  const g = E.goulots().find((x) => x.kind === "combustible");
+  assert.ok(g && !g.arret && g.reste <= D.ATELIERS.combustibleAlerte, JSON.stringify(g));
+  assert.ok(/n’a plus que/.test(g.txt));
+});
+test("la braise du combustible survit à la sauvegarde", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 5;
+  avance(E, 20);
+  const braise = E.state.combu.centrale;
+  assert.ok(braise > 0 && braise < 1, "braise " + braise);
+  const F = createEngine({ now: () => t, rand: () => 0.99 });
+  F.load(JSON.stringify(E.save ? JSON.parse(E.save()) : E.state));
+  assert.ok(Math.abs(F.state.combu.centrale - braise) < 1e-6);
+});

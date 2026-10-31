@@ -1678,7 +1678,7 @@
       h += '<p class="small">Un <b>cheval</b> (ch) est une unité de force. Tes machines, tes apprentis et tes ouvriers en consomment <b>quand ils travaillent</b> ; tes mains n’en consomment pas. Ce que tu produis (la bête de trait, le moulin, plus tard la vapeur et l’électricité) fournit l’énergie à tous tes ateliers. <b>Si tu en manques, ils ralentissent proportionnellement, sans jamais descendre sous la moitié de leur vitesse.</b></p>';
       h += '<h3 class="sub">Ce qui consomme</h3>';
       h += e.conso.length ? e.conso.map((x) => '<div class="auto-ligne"><span class="grow">' + esc(x.n) + ' <span class="tiny muted">×' + x.nombre + "</span></span><b>" + c(x.ch) + " ch</b></div>").join("") : '<p class="small muted">Rien ne consomme : aucune machine ni aucun travailleur n’est au travail en ce moment.</p>';
-      h += '<h3 class="sub">Ce qui fournit</h3>' + e.sources.map((x) => '<div class="auto-ligne"><span class="grow">' + esc(x.n) + "</span><b>+" + c(x.ch) + " ch</b></div>").join("");
+      h += '<h3 class="sub">Ce qui fournit</h3>' + e.sources.map((x) => '<div class="auto-ligne"><span class="grow">' + esc(x.n) + (x.brule ? ' <span class="tiny muted">' + (x.arret ? "à l’arrêt : plus de " + esc(x.brule) : "brûle : " + esc(x.brule) + (x.reste < 3600 ? " · " + Math.floor(x.reste / 60) + " min " + (x.reste % 60) + " s" : "")) + "</span>" : "") + "</span><b>" + (x.arret ? "0" : "+" + c(x.ch)) + " ch</b></div>").join("");
       if (e.aConstruire.length) h += '<h3 class="sub">À construire</h3>' + e.aConstruire.map((x) => '<div class="auto-ligne"><span class="grow">' + esc(x.n) + '</span><span class="muted">+' + c(x.ch) + " ch</span></div>").join("");
       return h + "</div></div>";
     }
