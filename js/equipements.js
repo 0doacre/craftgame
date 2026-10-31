@@ -172,8 +172,8 @@
           heat: "brulant",
           label: "🔥 Brûlant",
           text: diffTool
-            ? "Les matières sont exactes sur cette station, mais il te faut un autre outil (" + cfg.equipment[c.equipment].n + ")."
-            : "Les matières et l’outil sont exacts : essaie une autre allure ou un autre geste de cet outil."
+            ? "Les ressources sont exactes sur cette station, mais il te faut un autre outil (" + cfg.equipment[c.equipment].n + ")."
+            : "Les ressources et l’outil sont exacts : essaie une autre allure ou un autre geste de cet outil."
         };
       }
       // 2. Correspondance exacte sur un autre station
@@ -184,10 +184,10 @@
         return {
           heat: "chaud",
           label: "🌡️ Chaud",
-          text: "Ces matières forment bien une recette de ton âge, mais sur une autre station (" + targetPlace + ")."
+          text: "Ces ressources forment bien une recette de ton âge, mais sur une autre station (" + targetPlace + ")."
         };
       }
-      // 3. Ingrédient superflu : bonnes matières pour cet outil et ce geste, mais matière en trop
+      // 3. Ingrédient superflu : bonnes ressources pour cet outil et ce geste, mais ressource en trop
       const exactModeSuper = Object.keys(cfg.recipes).filter(id => {
         if (!E.ageOK(id) || E.state.known[id]) return false;
         if (!cfg.recipes[id].some(c => c.equipment === equipment && c.mode === mode)) return false;
@@ -198,7 +198,7 @@
         return {
           heat: "brulant",
           label: "🔥 Brûlant",
-          text: "Cet outil et ce geste reconnaissent ces matières, mais l’une d’entre elles est superflue sur l’établi."
+          text: "Cet outil et ce geste reconnaissent ces ressources, mais l’une d’entre elles est superflue sur l’établi."
         };
       }
       // 5. Ingrédients partiels pour cet outil et ce geste : préciser le nombre attendu
@@ -209,8 +209,8 @@
         const matchedCount = parts.filter(p => bestCand.includes(p)).length;
         const missingCount = Math.max(1, totalCount - matchedCount);
         const textDetail = totalCount > 1
-          ? "Cet outil et ce geste travaillent bien ces matières, mais il manque " + missingCount + " ingrédient" + (missingCount > 1 ? "s" : "") + " (" + totalCount + " matières attendues)."
-          : "Cet outil et ce geste travaillent bien l’une de ces matières, mais la combinaison d’ingrédients est incomplète.";
+          ? "Cet outil et ce geste travaillent bien ces ressources, mais il manque " + missingCount + " ingrédient" + (missingCount > 1 ? "s" : "") + " (" + totalCount + " ressources attendues)."
+          : "Cet outil et ce geste travaillent bien l’une de ces ressources, mais la combinaison d’ingrédients est incomplète.";
         return {
           heat: "tiede",
           label: "🌤️ Tiède",
@@ -220,7 +220,7 @@
       return {
         heat: "froid",
         label: "❄️ Froid",
-        text: "Ce geste ne donne rien avec ces matières. Essaie un autre outil ou une autre combinaison."
+        text: "Ce geste ne donne rien avec ces ressources. Essaie un autre outil ou une autre combinaison."
       };
     };
     E.attemptWith = (equipment, mode, ids) => {
@@ -233,7 +233,7 @@
       const recipe = E.equipmentRecipe(equipment, mode, parts);
       if (!recipe) return { kind: "equipment", why: "incompatible", equipment, mode, thermo: E.equipmentThermometer(equipment, mode, parts) };
       // Une mauvaise sélection ne doit ni révéler une recette incompatible,
-      // ni dépenser de matière, ni contaminer les souvenirs du geste.
+      // ni dépenser de ressource, ni contaminer les souvenirs du geste.
       return E.attempt(E.item(recipe).r[0], parts, { equipment, mode });
     };
     (root.EclatAtelierEconomy||require("./atelier-economie.js")).attach(E);

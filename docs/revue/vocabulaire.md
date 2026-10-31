@@ -26,3 +26,24 @@ Règle posée : l'interface parle comme l'interface d'un jeu de gestion ou de st
 ## Ce qui reste volontairement en voix du jeu
 
 Les énigmes des recettes (« Prends du bois et retire tout ce qui dépasse »), les noms des terres, des âges et des personnages (Troqueur, Semeur, Relève), et les textes du Journal : ce sont le récit, pas l'interface. La frontière : si le texte dit quoi toucher ou quoi faire, il suit la règle ; s'il dit ce qui se passe dans le monde, il garde sa voix.
+
+## Passe de vocabulaire du 31 octobre 2026 (0.61.0)
+
+Réponses du porteur du projet à l'artefact « Passe de vocabulaire » (14 questions) :
+
+| Question | Réponse | Appliqué |
+|---|---|---|
+| Matière ou ressource | **Ressource partout** | oui, 105 textes |
+| Tenter ou essayer | **Essayer, un essai** | oui |
+| Stock, cadence, ordre permanent | **Réserve et consigne** | oui |
+| Paliers du seuil déjà pris | **Deux renommés** : À l'arrêt, Quelques provisions | oui |
+| « L'atelier » au singulier | **Jamais, hors de l'écran Atelier** | oui (voix de l'artisan, textes de découverte) |
+| « action » ou « geste » | Question posée : avis demandé | geste conservé, 3 textes corrigés |
+| Le Domaine | Terres dans l'interface ; **un nom par âge** proposé pour le lieu du joueur | en attente |
+| Établi, outil, station | Garder les trois | oui |
+| Textes de l'ancien mode équipé | Supprimer ou réécrire | oui |
+| « Verser une prime » | Garder | oui |
+| Mots des nouveautés (fatigue, grève, combustible, usure, panne) | Garder | oui |
+| Un glossaire unique | **LEXIQUE.md refondu** ; LANGAGE.md rangé dans `docs/revue/langage-0-56.md` | oui |
+| Textes de découverte | Premier jet par métier, proposé par Claude | en attente |
+| Noms des métiers et des travailleurs | **À changer** : propositions du porteur | en attente |

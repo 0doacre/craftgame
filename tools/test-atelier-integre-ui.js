@@ -16,7 +16,7 @@ async function run(){await new Promise(r=>server.listen(0,"127.0.0.1",r));browse
     ok(await p.evaluate(()=>document.getElementById("v-atelier").scrollWidth<=document.getElementById("views").clientWidth+2),"pas de débordement horizontal de l’Atelier");
     ok(await p.locator('#atelier-equipe [data-ae="harvest"], #atelier-equipe [data-goto]').count()===0,"ni récolte ni fiche dans l’Atelier");
     ok(await p.locator('.ae-posts').count()===0,"pas de doublon de l’établi quand c’est le seul poste");
-    ok(!(await p.locator('#atelier-equipe').textContent()).includes('Pose tes matières')&&!(await p.locator('#atelier-equipe').textContent()).includes('Un clic pour'),"textes explicatifs retirés");
+    ok(!(await p.locator('#atelier-equipe').textContent()).includes('Pose tes ressources')&&!(await p.locator('#atelier-equipe').textContent()).includes('Un clic pour'),"textes explicatifs retirés");
     const tiles=await p.locator('.ae-resource').evaluateAll(nodes=>nodes.every(n=>{const btn=n.querySelector('button'),r=btn.getBoundingClientRect(),hasIc=btn.querySelector('.ic')||btn.querySelector('svg'),hasCount=btn.querySelector('[data-ae-count]');return r.height>=44&&r.width>=44&&hasIc&&hasCount;}));
     ok(tiles,"matières densifiées en tuiles d’icônes avec leur réserve");
     if(process.env.EQUIPMENT_SHOTS){fs.mkdirSync(process.env.EQUIPMENT_SHOTS,{recursive:true});await p.evaluate(()=>document.getElementById('views').scrollTop=0);await p.screenshot({path:path.join(process.env.EQUIPMENT_SHOTS,'atelier-epure-'+width+'.png')});}

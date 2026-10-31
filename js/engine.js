@@ -4106,13 +4106,13 @@
     E.AIDES = {
       etude: {
         kicker: "Atelier",
-        titre: "L’étude des matières",
-        texte: "Observer une ressource (icône 👁️) permet d’étudier ses caractéristiques. L’étude révèle les gestes compatibles (tailler, chauffer, tresser...) sans détruire la matière. C’est à partir de ces gestes que tu découvriras les nouvelles recettes de ton Carnet."
+        titre: "L’étude des ressources",
+        texte: "Observer une ressource (icône 👁️) permet d’étudier ses caractéristiques. L’étude révèle les gestes compatibles (tailler, chauffer, tresser...) sans détruire la ressource. C’est à partir de ces gestes que tu découvriras les nouvelles recettes de ton Carnet."
       },
       commandes: {
         kicker: "Atelier",
         titre: "Commandes et réservations",
-        texte: "Quand tu lances une commande, les ingrédients nécessaires disponibles en Réserve sont réservés sur ton établi. Ce qui manque est extrait ou préparé au fur et à mesure. Les mains et les machines libres s’y consacrent. Mettre en pause une commande libère les travailleurs pour les autres ordres sans perdre la progression ni les matières réservées. Passer en priorité place la commande en tête de file."
+        texte: "Quand tu lances une commande, les ingrédients nécessaires disponibles en Réserve sont réservés sur ton établi. Ce qui manque est extrait ou préparé au fur et à mesure. Les mains et les machines libres s’y consacrent. Mettre en pause une commande libère les travailleurs pour les autres ordres sans perdre la progression ni les ressources réservées. Passer en priorité place la commande en tête de file."
       },
       maitrise: {
         kicker: "Domaine & Terres",
@@ -4132,7 +4132,7 @@
       outils: {
         kicker: "Atelier équipé",
         titre: "Outils et gestes du métier",
-        texte: "Chaque station et outil propose des modes de travail précis (tailler, couper, cuire, polir). Un outil plus affûté ou mieux adapté, comme le couteau de silex pour les lanières, divise le temps de fabrication sans consommer plus de matières par pièce."
+        texte: "Chaque station et outil propose des modes de travail précis (tailler, couper, cuire, polir). Un outil plus affûté ou mieux adapté, comme le couteau de silex pour les lanières, divise le temps de fabrication sans consommer plus de ressources par pièce."
       }
     };
     /* Pose un extracteur libre sur le gisement de sa terre où il manque le plus.

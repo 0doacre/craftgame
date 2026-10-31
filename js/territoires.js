@@ -101,7 +101,7 @@
         level > 0 ? { n: "Installation", done: installed, texte: "Remettre un extracteur en production dans cette terre" } : { n: PHASES[0], done: r.outils.every(made), texte: "Fabriquer ou réparer : " + r.outils.map(id => I[id].n).join(", "), ids: r.outils },
         { n: PHASES[1], done: r.lieux.every(x => remembered.has(x)), texte: r.lieux.every(x => remembered.has(x)) ? "Lieux principaux déjà explorés · acquis conservé" : "Explorer les lieux principaux une première fois", lieux: r.lieux, permanent: true },
         { n: level > 0 ? "Ouvrage du retour" : PHASES[2], done: build.every(made), texte: "Réaliser : " + build.map(id => level > 0 && !s.known[id] && !s.seen[id] && !made(id) ? "une technique à découvrir" : I[id].n).join(", "), ids: build },
-        { n: PHASES[3], done: (s.territoires.produit[z] || 0) >= r.production * scale, texte: "Extraire automatiquement " + r.production * scale + " matières dans cette terre", actuel: Math.min(r.production * scale, Math.floor(s.territoires.produit[z] || 0)), cible: r.production * scale },
+        { n: PHASES[3], done: (s.territoires.produit[z] || 0) >= r.production * scale, texte: "Extraire automatiquement " + r.production * scale + " ressources dans cette terre", actuel: Math.min(r.production * scale, Math.floor(s.territoires.produit[z] || 0)), cible: r.production * scale },
         savoir ? { n: PHASES[4], done: true, texte: "Savoir-faire acquis · aucune série de base à refaire", permanent: true } : { n: PHASES[4], done: false, texte: "Achever une première série de " + qty + " fabrications : " + I[series].n, actuel: Math.min(qty, Math.floor(s.made[series] || 0)), cible: qty, ids: [series] }
       ];
       const complete = open && phases.every(p => p.done);

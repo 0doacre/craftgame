@@ -201,7 +201,7 @@
         if (e.kind !== "done") return;
         const it = I[e.job.id], n = e.job.s[e.job.s.length - 1][1];
         if (U.tab !== "atelier") toast("✋ Fini : <b>" + esc(it.n) + "</b>" + (E.isUnique(it) ? "" : " ×" + fmt(n)), { key: "it:" + e.job.id, p: 1 });
-        else render(); // pas pendant un appui long sur une matière
+        else render(); // pas pendant un appui long sur une ressource
       });
       E.on("projstep", (x) => {
         const P = D.PROJECTS[x.pid], s = P.steps[x.step];
@@ -383,14 +383,14 @@
           const id = inv.dataset.inv;
           U.lp = { id, t: setTimeout(() => { U.lp = null; U.lpFired = performance.now(); vibe(15); openItemInfo(id); }, 480) };
         }
-        // Labo : une matière de la liste ou une case de l’établi, appui long = la fiche, avec de quoi la fabriquer tout de suite
+        // Labo : une ressource de la liste ou une case de l’établi, appui long = la fiche, avec de quoi la fabriquer tout de suite
         const lab = !inv && ev.target.closest("[data-ae-resource], .ae-slots .ae-filled");
         if (lab) {
           const need = lab.querySelector("[data-ae-need]"), id = lab.dataset.aeResource || (need && need.dataset.aeNeed);
           if (id) U.lp = { id, t: setTimeout(() => { U.lp = null; U.lpFired = performance.now(); vibe(15); openItemInfo(id); }, 480) };
         }
       });
-      // le relâcher qui suit un appui long ne doit pas aussi choisir la matière (ou la retirer de l’établi)
+      // le relâcher qui suit un appui long ne doit pas aussi choisir la ressource (ou la retirer de l’établi)
       document.addEventListener("click", (ev) => {
         if (U.lpFired && performance.now() - U.lpFired < 900) { U.lpFired = 0; ev.stopImmediatePropagation(); ev.preventDefault(); }
       }, true);

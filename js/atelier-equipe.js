@@ -27,25 +27,18 @@
     const button=(action,value,title,cls="",disabled=false)=>{
       const cur=currencyName();
       const help={
-        study:"Étudier les matières déjà vues en dépensant l’Intuition indiquée",
+        study:"Étudier les ressources déjà vues en dépensant l’Intuition indiquée",
         place:"Choisir cette station",
         legacy:"Utiliser les procédés des âges après le Cuivre",
-        slot:"Poser ou retirer une matière dans cet emplacement",
-        prepare:"Préparer les matières, la station et l’outil pour : "+name(value),
-        order:"Fabriquer : "+name(value)+", en préparant les composants manquants",
-        order_missing:"Façonner les sous-composants manquants depuis la réserve",
-        clear:"Retirer toutes les matières de l’établi et les remettre en réserve",
-        cadence:"Maintenir un stock de 100 "+name(value)+" avec les machines au repos",
-        cadence_toggle:"Mettre en pause ou réactiver la cadence automatique pour : "+name(value),
-        cadence_cap:"Ajuster le plafond de stock maintenu par les machines (25, 50, 100, 250, 500)",
-        cadence_del:"Retirer le maintien automatique de stock pour : "+name(value),
-        build:"Aménager l’établi pour accueillir un apprenti",
-        hire:"Inviter un apprenti avec les "+cur+" de ta bourse",
-        fund:"Réserver 1 part pour l’apprenti",
-        fund5:"Réserver 5 parts pour l’apprenti",
-        worker:"Démarrer ou mettre en pause l’aide de l’apprenti",
-        withdraw:"Récupérer la part réservée non utilisée quand l’apprenti est en pause",
-        sell:"Troquer les lanières au-delà de ta réserve"
+        slot:"Poser ou retirer une ressource dans cet emplacement",
+        prepare:"Préparer les ressources, la station et l’outil pour : "+name(value),
+        order:"Fabriquer : "+name(value)+", en préparant les pièces manquantes",
+        order_missing:"Façonner les pièces manquantes depuis la réserve",
+        clear:"Retirer toutes les ressources de l’établi et les remettre en réserve",
+        cadence:"Garder 100 "+name(value)+" en réserve avec les machines au repos",
+        cadence_toggle:"Mettre en pause ou réactiver la consigne pour : "+name(value),
+        cadence_cap:"Ajuster la réserve visée par les machines (25, 50, 100, 250, 500)",
+        cadence_del:"Retirer la consigne de réserve pour : "+name(value),
       };
       const explanation=help[action]||title.replace(/<[^>]*>/g,"");
       return '<button type="button" id="ae-'+action+'-'+esc(value||"0")+'" class="btn '+cls+'" data-ae="'+action+'" data-value="'+esc(value||"")+'" title="'+esc(explanation)+'"'+(disabled?' disabled':'')+'>'+title+'</button>';
@@ -146,9 +139,9 @@
       U.geste=reference?I[reference].r[0]:"assembler";
       return {w,metiers,tools,tool,recipe};
     }
-    /* Une matière est « utile » ici si une recette encore inconnue, dont tous les ingrédients ont été vus, la demande
+    /* Une ressource est « utile » ici si une recette encore inconnue, dont tous les ingrédients ont été vus, la demande
      * avec cet outil et ce geste. Mémorisé par outil, geste et progression : le calcul parcourt les recettes. */
-    /* 0.55 : le Labo enferme la découverte dans le métier ouvert. Les matières montrées sont celles qui entrent dans au moins une recette du métier
+    /* 0.55 : le Labo enferme la découverte dans le métier ouvert. Les ressources montrées sont celles qui entrent dans au moins une recette du métier
      * (hors secrètes), jamais celles d'un autre : on sait pourquoi on les pose. Mémorisé par métier et par âge. */
     const memoMat={age:-1,v:{}};
     function matieresDuMetier(f){
@@ -162,7 +155,7 @@
     function horsMetier(){
       const {w}=work(),parts=[...new Set(w.slots)].sort().join(",");
       if(!parts)return false;
-      /* toutes les recettes qui prennent exactement ces matières, avec n'importe quel outil : si aucune n'est du métier ouvert (ni déjà connue), rien ne se passe ici, et le thermomètre ne dit pas qu'elle existe ailleurs */
+      /* toutes les recettes qui prennent exactement ces ressources, avec n'importe quel outil : si aucune n'est du métier ouvert (ni déjà connue), rien ne se passe ici, et le thermomètre ne dit pas qu'elle existe ailleurs */
       const memes=Object.keys(I).filter(id=>I[id].r&&!I[id].sec&&!I[id].path&&E.ageOK(id)&&Object.keys(I[id].r[1]).sort().join(",")===parts);
       return memes.length>0&&memes.every(id=>!E.state.known[id]&&E.atelierDe(id)!==w.metier);
     }
@@ -232,12 +225,12 @@
       if(recipe&&s.known[recipe]&&(tool.batch||1)>1&&!E.isUnique(I[recipe]))h+=button("batch",recipe,esc(label(w.mode,tool.modes[w.mode],w.metier))+' ×'+tool.batch+' · '+fmtTime(E.batchTime(recipe,tool.batch,{equipment:w.eq,mode:w.mode})),"",false);
       const heatCls=lastHeat?' ae-heat-'+lastHeat:'';
       h+='</div><p id="ae-result" class="small'+heatCls+'" role="status">'+esc(message)+'</p></div><aside class="ae-tools">'+actionsHTML(tools,w)+'</aside></div></section>';
-      h+='<section class="card ae-stock"><div class="ae-stock-search"><input id="ae-search" type="search" aria-label="Chercher une matière" placeholder="Chercher une matière…" value="'+esc(U.equipmentSearch||"")+'"></div>';
+      h+='<section class="card ae-stock"><div class="ae-stock-search"><input id="ae-search" type="search" aria-label="Chercher une ressource" placeholder="Chercher une ressource…" value="'+esc(U.equipmentSearch||"")+'"></div>';
       const filtre=s.settings.equipmentFilter||"utiles";
       const chip=(v,l,t)=>'<button type="button" class="ae-chip'+(filtre===v?' on':'')+'" data-ae="filtre" data-value="'+v+'" aria-pressed="'+(filtre===v)+'" title="'+esc(t)+'">'+l+'</button>';
-      h+='<div class="ae-filtres" role="group" aria-label="Matières à montrer">'+chip("utiles","✦ Utiles","Les matières qui peuvent encore donner une recette avec cet outil et ce geste")+chip("tout","Tout","Toutes les matières que tu as vues")+chip("reserve","En réserve","Seulement ce que tu as en stock")+'</div>';
+      h+='<div class="ae-filtres" role="group" aria-label="Ressources à montrer">'+chip("utiles","✦ Utiles","Les ressources qui peuvent encore donner une recette avec cet outil et ce geste")+chip("tout","Tout","Toutes les ressources que tu as vues")+chip("reserve","En réserve","Seulement ce que tu as en stock")+'</div>';
       const study=E.studyAllCost();
-      if(study.n)h+='<div class="ae-etude">'+button("study","","Étudier · ✨"+api.fmt(study.c),"small ghost",s.intu<study.c)+'<button type="button" class="btn-aide mini" data-aide="etude" title="Comprendre l’étude des matières" aria-label="Comprendre l’étude des matières">?</button></div>';
+      if(study.n)h+='<div class="ae-etude">'+button("study","","Étudier · ✨"+api.fmt(study.c),"small ghost",s.intu<study.c)+'<button type="button" class="btn-aide mini" data-aide="etude" title="Comprendre l’étude des ressources" aria-label="Comprendre l’étude des ressources">?</button></div>';
       h+='<p id="ae-discovery-empty" class="small muted" hidden></p><div class="ae-inventory">';
       for(const id of ids){const picked=w.slots.includes(id),reacts=E.equipmentHasDiscovery(id,w.eq,w.mode,w.metier);h+='<div class="ae-resource'+(reacts?' ae-reacts':'')+'" data-ae-resource="'+esc(id)+'" data-name="'+esc(name(id).toLowerCase())+'">'+button("item",id,icon(id,"sm")+'<span class="ae-item-name">'+esc(name(id))+'</span>'+(reacts?'<i class="ae-react-spark" title="Piste disponible">✦</i>':'')+'<b data-ae-count="'+esc(id)+'"></b>',picked?"ae-selected":"",!picked&&E.count(id)<1)+'</div>';
       }
@@ -249,7 +242,7 @@
       if(cads.length){
         const activeCount=cads.filter(c=>c.on&&c.status!=="off").length;
         const totalMachs=cads.reduce((acc,c)=>acc+c.machs,0);
-        h+='<section class="card ae-cadences-panel"><details class="ae-cadences-details" open><summary class="ae-eco-summary" title="Afficher ou replier l’état des cadences de machines"><h3>⚙️ Cadences des machines ('+cads.length+')</h3><span class="small muted">'+activeCount+' active(s) · '+totalMachs+' mach.</span></summary><div class="ae-cad-grid">'+cads.map(c=>{
+        h+='<section class="card ae-cadences-panel"><details class="ae-cadences-details" open><summary class="ae-eco-summary" title="Afficher ou replier l’état des consignes de machines"><h3>⚙️ Consignes des machines ('+cads.length+')</h3><span class="small muted">'+activeCount+' active(s) · '+totalMachs+' mach.</span></summary><div class="ae-cad-grid">'+cads.map(c=>{
           let stBadge='';
           if(c.status==="ok") stBadge='<span class="ae-cad-badge ae-badge-ok">▸ '+c.machs+' mach. · +'+(api.perMin?api.perMin(c.rate):Math.round(c.rate*60)+'/min')+'</span>';
           else if(c.status==="full") stBadge='<span class="ae-cad-badge ae-badge-full">✓ Plein ('+(api.fmt?api.fmt(c.cap):c.cap)+')</span>';
@@ -268,12 +261,12 @@
         if(canCadence){
           if(cad&&cad.on!==false)cadBtn=button("cadence_toggle",id,"⚙️ Actif","small pri",false)+button("cadence_cap",id,(cad.cap||100)+" ▾","small ghost",false);
           else if(cad&&cad.on===false)cadBtn=button("cadence_toggle",id,"⏸️ Pause","small ghost",false)+button("cadence_cap",id,(cad.cap||100)+" ▾","small ghost",false);
-          else cadBtn=button("cadence",id,"⚙️ Cadencer","small ghost",false);
+          else cadBtn=button("cadence",id,"⚙️ Consigne","small ghost",false);
         }
         let stLine='';
         if(cad&&c){
-          if(c.status==="starved") stLine='<div class="ae-known-cad-status ae-badge-warn">⚠️ Matières manquantes : '+c.miss.map(m=>esc(name(m))).join(', ')+'</div>';
-          else if(c.status==="ok") stLine='<div class="ae-known-cad-status ae-badge-ok">⚙️ '+c.machs+' mach. · +'+(api.perMin?api.perMin(c.rate):Math.round(c.rate*60)+'/min')+' (stock : '+(api.fmt?api.fmt(c.have):c.have)+'/'+(api.fmt?api.fmt(c.cap):c.cap)+')</div>';
+          if(c.status==="starved") stLine='<div class="ae-known-cad-status ae-badge-warn">⚠️ Ressources manquantes : '+c.miss.map(m=>esc(name(m))).join(', ')+'</div>';
+          else if(c.status==="ok") stLine='<div class="ae-known-cad-status ae-badge-ok">⚙️ '+c.machs+' mach. · +'+(api.perMin?api.perMin(c.rate):Math.round(c.rate*60)+'/min')+' (réserve : '+(api.fmt?api.fmt(c.have):c.have)+'/'+(api.fmt?api.fmt(c.cap):c.cap)+')</div>';
           else if(c.status==="full") stLine='<div class="ae-known-cad-status ae-badge-full">✓ Réserve pleine ('+(api.fmt?api.fmt(c.have):c.have)+'/'+(api.fmt?api.fmt(c.cap):c.cap)+')</div>';
           else if(c.status==="busy") stLine='<div class="ae-known-cad-status ae-badge-muted">⏳ Machines occupées sur les commandes ('+(api.fmt?api.fmt(c.have):c.have)+'/'+(api.fmt?api.fmt(c.cap):c.cap)+')</div>';
           else if(c.status==="off") stLine='<div class="ae-known-cad-status ae-badge-off">⏸️ En pause ('+(api.fmt?api.fmt(c.have):c.have)+'/'+(api.fmt?api.fmt(c.cap):c.cap)+')</div>';
@@ -305,21 +298,17 @@
         el.classList.toggle("ae-zero",n<1);
         b.classList.toggle("ae-selected",picked);
         b.setAttribute("aria-pressed",String(picked));
-        b.setAttribute("aria-label",name(id)+', '+n.toLocaleString('fr-FR')+' en stock'+(picked?', sur l’établi':''));
+        b.setAttribute("aria-label",name(id)+', '+n.toLocaleString('fr-FR')+' en réserve'+(picked?', sur l’établi':''));
         b.title=name(id)+' · '+api.fmt(n);
         el.querySelector("[data-ae-count]").textContent=api.fmt(n);
       });
       const empty=r.querySelector('#ae-discovery-empty');
-      if(empty){empty.hidden=visible>0;empty.innerHTML=query?'Aucune matière ne correspond à cette recherche.':filtre==="utiles"?'Rien à découvrir ici avec cet outil et ce geste. Change d’outil, ou montre <button type="button" class="btn mini ghost" data-ae="filtre" data-value="tout">toutes les matières</button>.':filtre==="reserve"?'Rien en réserve.':'Aucune matière.';}
+      if(empty){empty.hidden=visible>0;empty.innerHTML=query?'Aucune ressource ne correspond à cette recherche.':filtre==="utiles"?'Rien à découvrir ici avec cet outil et ce geste. Change d’outil, ou montre <button type="button" class="btn mini ghost" data-ae="filtre" data-value="tout">toutes les ressources</button>.':filtre==="reserve"?'Rien en réserve.':'Aucune ressource.';}
       const bench=r.querySelector('.ae-bench'),views=document.getElementById('views'),mini=r.querySelector('.ae-mini');
       if(mini)mini.hidden=!(w.slots.length&&bench.getBoundingClientRect().bottom<views.getBoundingClientRect().top);
       r.querySelectorAll("[data-ae-need]").forEach(el=>{const n=E.count(el.dataset.aeNeed),need=Number(el.dataset.need);el.textContent=need?'×'+need+' requis · '+Math.floor(n)+' disponibles'+(n<need?' · manque '+Math.ceil(need-n):' · prêt'):Math.floor(n)+' disponibles';});
       const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
       set("ae-wallet",money(E.state.ecus));
-      const missing=Math.max(0,e.hire+1-E.state.ecus);set("ae-hire-goal",!e.hired?(missing?'Encore '+money(missing)+' pour accueillir l’apprenti.':'Accueil de l’apprenti finançable.'):'');
-      set("ae-worker-status",e.status+(e.hired?' · '+name(e.tool||"aucun")+' · '+e.produced+' lanières façonnées':''));set("ae-worker-pay",'Part réservée : '+money(e.wage)+' par pièce · Réserve : '+money(e.budget));
-      const wp=document.getElementById("ae-worker-progress");if(wp){wp.hidden=!e.hired;wp.value=e.progress;}
-      const mp=document.getElementById("ae-merchant-progress");if(mp)mp.value=e.merchant?e.saleClock:0;
       const surplus=Math.max(0,Math.floor(E.count("laniere")-e.reserve)),quote=E.merchantQuote(surplus);
       set("ae-quote",(e.merchant?'Prochain passage : '+fmtTime(5-e.saleClock)+'. ':'Troc en pause. ')+surplus+' lanières → '+money(quote.net)+' nets (part clan : '+money(quote.tax)+').');
       set("ae-tax",'Paliers de '+e.quota+' lanières : 10 %, 20 %, 30 %, 40 %, puis 50 % de contribution au clan. Palier actuel : '+e.nextRate+' %. Renouvellement dans '+Math.ceil(60-e.clock)+' s. Net troqué : '+money(e.net)+' ; parts apprenti : '+money(e.wages)+'.');
@@ -336,7 +325,7 @@
       }
       const c=E.equipmentChoices(id).find(c=>c.ready);if(!c){message="Il faut d’abord : "+name(E.equipmentCheck(id)?.required||"un outil adapté");return;}Object.assign(work().w,{eq:c.equipment,mode:c.mode,metier:E.atelierDe(id),slots:Object.keys(I[id].r[1]),prepared:id});message="Recette préparée : "+name(id);}
     function forge(mode){const {w}=work();if(!w.slots.length){if(mode&&Object.hasOwn(work().tool.modes,mode)){w.mode=mode;w.prepared=null;}return;}w.mode=mode||w.mode;work();
-      if(horsMetier()){lastHeat="froid";message="Ce geste ne donne rien avec ces matières. Essaie un autre outil, une autre combinaison, ou un autre métier.";A.fail(0);redraw();return;}
+      if(horsMetier()){lastHeat="froid";message="Ce geste ne donne rien avec ces ressources. Essaie un autre outil, une autre combinaison, ou un autre métier.";A.fail(0);redraw();return;}
       U.forging=true;let result;try{result=isGrand(w.eq)?E.attempt(w.mode,w.slots):E.attemptWith(w.eq,w.mode,w.slots);}finally{U.forging=false;}U.last=result;
       if(result.kind==="craft"||result.kind==="queued"){
         lastHeat="success";
@@ -360,12 +349,12 @@
       else if(result.kind==="fail"&&result.heat!==undefined){
         lastHeat=["froid","tiede","chaud","brulant"][result.heat]||"froid";
         const hLbl=["❄️ Froid","🌤️ Tiède","🌡️ Chaud","🔥 Brûlant"][result.heat]||"❄️ Froid";
-        message=hLbl+(result.text?" · "+result.text:" · Aucune réaction avec ces matières.");
+        message=hLbl+(result.text?" · "+result.text:" · Aucune réaction avec ces ressources.");
         A.fail(result.heat||0);
       }
       else {
         lastHeat="froid";
-        message=result.kind==="owned"?"Tu possèdes déjà cet objet.":"Ce geste ne donne rien avec ces matières. Essaie un autre outil ou une autre combinaison.";
+        message=result.kind==="owned"?"Tu possèdes déjà cet objet.":"Ce geste ne donne rien avec ces ressources. Essaie un autre outil ou une autre combinaison.";
         A.fail(0);
       }
       if(result.fresh&&(result.kind==="craft"||result.kind==="learn"))api.fete({id:result.id,kick:"Nouvelle découverte",title:name(result.id),sub:I[result.id].u||""});
@@ -378,7 +367,7 @@
       if(action==="metier"){if(D.ATELIERS.familles.some(f=>f.id===id)){w.metier=id;w.prepared=null;}}
       else if(action==="filtre"){E.state.settings.equipmentFilter=["utiles","tout","reserve"].includes(id)?id:"utiles";redraw();return;}
       else if(action==="mode"){if(Object.hasOwn(tool.modes,id)){w.mode=id;w.prepared=null;}}
-      else if(action==="study"){const n=E.studyAll();message=n?n+' matières étudiées.':'Il manque de l’Intuition pour étudier ces matières.';}
+      else if(action==="study"){const n=E.studyAll();message=n?n+' ressources étudiées.':'Il manque de l’Intuition pour étudier ces ressources.';}
       else if(action==="action"){const [te,tm]=String(id).split("|"),t=tools.find(x=>x.id===te);if(t&&Object.hasOwn(t.modes,tm)){w.eq=te;w.mode=tm;w.prepared=null;}}
       else if(action==="tool"){w.eq=id;const t=tools.find(x=>x.id===id)||D.CRAFT_EQUIPMENT.equipment[id];if(t)w.mode=Object.keys(t.modes)[0];w.prepared=null;}
       else if(action==="item"){if(w.slots.includes(id))w.slots.splice(w.slots.indexOf(id),1);else if(w.slots.length<3)w.slots.push(id);w.prepared=null;}
@@ -387,13 +376,13 @@
       else if(action==="forge"){forge(id);return;}
       else if(action==="prepare")prepare(id);
       else if(action==="order"){const result=E.order(id,1);message=result.ok?"Commande lancée : "+name(id):"Il manque une recette ou un équipement : consulte le Carnet.";}
-      else if(action==="order_missing"){const result=E.order(id,1);message=result.ok?"Façonnage lancé pour : "+name(id):"Matières insuffisantes pour : "+name(id);if(typeof toast==="function")toast(message);}
-      else if(action==="batch"){const result=E.queue(id,tool.batch||1,false,undefined,{equipment:w.eq,mode:w.mode});message=result.ok?"Série lancée avec "+name(w.eq):"Pas assez de matières ou de place dans les commandes.";}
+      else if(action==="order_missing"){const result=E.order(id,1);message=result.ok?"Façonnage lancé pour : "+name(id):"Ressources insuffisantes pour : "+name(id);if(typeof toast==="function")toast(message);}
+      else if(action==="batch"){const result=E.queue(id,tool.batch||1,false,undefined,{equipment:w.eq,mode:w.mode});message=result.ok?"Série lancée avec "+name(w.eq):"Pas assez de ressources ou de place dans les commandes.";}
       else if(action==="cadence"){
         if(E.setCadence){
           const r=E.setCadence(id,100,true);
           if(r.ok){
-            message="Cadence activée : maintien de 100 "+name(id)+" par les machines libres.";
+            message="Consigne activée : garder 100 "+name(id)+" en réserve avec les machines libres.";
             if(typeof toast==="function")toast(message);
           }
         }
@@ -404,7 +393,7 @@
           if(cur){
             const nextOn=!cur.on;
             E.setCadence(id,cur.cap,nextOn);
-            message=nextOn?"Cadence réactivée pour "+name(id)+" ("+cur.cap+" max).":"Cadence mise en pause pour "+name(id)+".";
+            message=nextOn?"Consigne réactivée pour "+name(id)+" ("+cur.cap+" max).":"Consigne en pause pour "+name(id)+".";
             if(typeof toast==="function")toast(message);
           }
         }
@@ -418,7 +407,7 @@
             const idx=tiers.indexOf(curCap);
             const nextCap=tiers[(idx+1)%tiers.length];
             E.setCadence(id,nextCap,cur.on);
-            message="Plafond de maintien ajusté à "+nextCap+" pour "+name(id)+".";
+            message="Réserve visée ajustée à "+nextCap+" pour "+name(id)+".";
             if(typeof toast==="function")toast(message);
           }
         }
@@ -426,17 +415,10 @@
       else if(action==="cadence_del"){
         if(E.setCadence){
           E.setCadence(id,null);
-          message="Maintien de stock retiré pour "+name(id)+".";
+          message="Consigne retirée pour "+name(id)+".";
           if(typeof toast==="function")toast(message);
         }
       }
-      else if(action==="build"){E.learn("etabli_amenage",true);message=E.order("etabli_amenage",1).ok?"Aménagement en cours.":"Consulte les matériaux requis dans le Carnet.";}
-      else if(action==="hire")message=E.workerHire().ok?"L’apprenti rejoint ton établi.":"Aménage la station, prépare l’outil et prépare l’accueil avec tes surplus.";
-      else if(action==="fund")message=E.workerFund(1).ok?"1 part réservée pour l’apprenti.":"Il faut 1 part disponible dans ta bourse.";
-      else if(action==="fund5")message=E.workerFund(5).ok?"5 parts réservées pour l’apprenti.":"Il faut 5 parts disponibles dans ta bourse.";
-      else if(action==="worker")E.workerSet(!E.atelierEconomyInfo().working);
-      else if(action==="withdraw")E.workerWithdraw();
-      else if(action==="sell"){const result=E.merchantSell(E.count("laniere"));message=result.ok?'Troqué : '+money(result.net)+' nets.':'Aucun surplus au-delà de ta réserve.';}
       redraw();
     });
     document.addEventListener("input",ev=>{if(ev.target.id==="ae-search"){U.equipmentSearch=ev.target.value;live();}});

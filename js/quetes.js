@@ -105,11 +105,11 @@
       if (b && b.why === "owned") return "";
       const p = E.plan(id, 1);
       const commande = E.orderStatus(id, 1).ok
-        ? line('<button class="btn small pri" data-chain="' + id + '" title="Mains et machines disponibles, pièces intermédiaires comprises">Fabriquer : ' + esc(it.n) + '</button><span class="tiny muted">La commande attendra les matières manquantes.</span>')
+        ? line('<button class="btn small pri" data-chain="' + id + '" title="Mains et machines disponibles, pièces intermédiaires comprises">Fabriquer : ' + esc(it.n) + '</button><span class="tiny muted">La commande attendra les ressources manquantes.</span>')
         : line('<button class="btn small ghost" data-tree="' + id + '">Voir les prérequis</button>');
       if (p.ok) {
         const parts = p.steps.filter((x) => x[0] !== id).map((x) => esc(I[x[0]].n.toLowerCase()));
-        return line('<button class="btn pri gmake" data-chain="' + id + '" title="' + (parts.length ? 'Composants compris : ' + parts.join(', ') : 'Fabriquer cette recette') + '">Fabriquer : ' + esc(it.n) + '</button>' + (parts.length ? '<span class="tiny muted">Composants compris.</span>' : ''));
+        return line('<button class="btn pri gmake" data-chain="' + id + '" title="' + (parts.length ? 'Pièces comprises : ' + parts.join(', ') : 'Fabriquer cette recette') + '">Fabriquer : ' + esc(it.n) + '</button>' + (parts.length ? '<span class="tiny muted">Composants compris.</span>' : ''));
       }
       // ce qui manque : d’abord ce qui se ramasse à la main, ici même
       const miss = Object.keys(p.missing);
@@ -211,7 +211,7 @@
             (times && st.known[i] ? '<button type="button" class="btn small ghost" data-tree="' + i + '" data-n="' + times + '" title="Préparer les ressources manquantes du passage, avec leurs ingrédients">Préparer ×' + fmt(times * (I[i].r[2] || 1)) + '</button>' : '') + '</div>';
         }).join("") + "</div></div>";
     }
-    /* combien de temps avant d’avoir de quoi payer une matière, à la production actuelle (extracteurs, machines) */
+    /* combien de temps avant d’avoir de quoi payer une ressource, à la production actuelle (extracteurs, machines) */
     function passEta(p, i) {
       const need = (p.left[i] || 0) - (S().inv[i] || 0);
       if (need <= 0) return "prêt";
@@ -338,7 +338,7 @@
         '<button class="btn pri" data-m="qresume" data-tab="labo">Découvrir au Labo</button>';
       let h = sc.missKeys.length ? '<div class="small row wrap"><span class="muted">Il manque :</span> ' +
         sc.missKeys.map((k) => itemPill(k, { qty: sc.missing[k], lack: true })).join("") + '</div>' : '';
-      if (it && it.r && E.orderStatus(id, 1).ok) h += '<button class="btn pri" data-m="qmake" data-id="' + id + '">Fabriquer : ' + esc(it.n) + '</button><p class="tiny muted">Mains et machines disponibles · attendra les matières manquantes.</p>';
+      if (it && it.r && E.orderStatus(id, 1).ok) h += '<button class="btn pri" data-m="qmake" data-id="' + id + '">Fabriquer : ' + esc(it.n) + '</button><p class="tiny muted">Mains et machines disponibles · attendra les ressources manquantes.</p>';
       const res = sc.missKeys.find((k) => E.isRawRes(k) && E.zoneOpen(E.RES_ZONE[k]));
       if (res) {
         const ee = E.extEtat(res);

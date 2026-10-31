@@ -71,8 +71,8 @@
   }
   function finish(result) {
     if(result.equipment&&result.mode){eq=result.equipment;mode=result.mode;}
-    if(result.kind==="equipment")notice(result.why==="missing"?"Il te faut : "+(E.equipmentList().find(x=>x.id===result.equipment)?.n||"un équipement adapté")+".":"Ces matières ne donnent rien ici avec ce geste. Essaie un autre outil ou d’autres matières.");
-    else if(result.kind==="empty")notice("Pose des matières sur l’établi.");
+    if(result.kind==="equipment")notice(result.why==="missing"?"Il te faut : "+(E.equipmentList().find(x=>x.id===result.equipment)?.n||"un équipement adapté")+".":"Ces ressources ne donnent rien ici avec ce geste. Essaie un autre outil ou d’autres ressources.");
+    else if(result.kind==="empty")notice("Pose des ressources sur l’établi.");
     else if(result.kind==="craft")notice("Fabriqué : "+name(result.id)+"."+(D.CRAFT_EQUIPMENT.equipment[result.id]?.benefit?" "+D.CRAFT_EQUIPMENT.equipment[result.id].benefit+".":""));
     else if(result.kind==="queued")notice("En cours : "+name(result.id)+".");
     else if(result.kind==="learn")notice("Recette trouvée : "+name(result.id)+(result.missing?". Il manque : "+Object.entries(result.missing).map(([k,n])=>n+" "+name(k)).join(", ")+".":". Tu peux la commander ci-dessous."));
@@ -87,7 +87,7 @@
   $("#batch").onclick=()=>{
     const id=E.equipmentRecipe(eq,mode,slots);if(id!=="laniere"||!E.state.known[id])return;
     const times=E.equipmentList().find(x=>x.id===eq)?.batch||1,r=E.queue(id,times,false,undefined,{equipment:eq,mode});
-    notice(r.ok?"Découpe lancée : "+(D.ITEMS[id].r[2]*times)+" lanières avec "+name(eq)+".":r.why==="qty"?"Pas assez de matières pour cette série.":"Impossible de lancer cette découpe pour le moment.");draw(true);save();
+    notice(r.ok?"Découpe lancée : "+(D.ITEMS[id].r[2]*times)+" lanières avec "+name(eq)+".":r.why==="qty"?"Pas assez de ressources pour cette série.":"Impossible de lancer cette découpe pour le moment.");draw(true);save();
   };
   function draw(force) {
     const available=E.equipmentList(),ready=available.filter(x=>x.ready);
@@ -119,7 +119,7 @@
       $("#slots").replaceChildren(...[0,1,2].map(i=>{const id=slots[i],b=button("",()=>{slots.splice(i,1);prepared=null;draw(true);save();},id?"filled-slot":"empty-slot",!id);if(id){b.append(text("span",D.ITEMS[id].ic||"","item-icon"),text("span",name(id)));const stock=text("small","","slot-stock");stock.dataset.slotItem=id;stock.dataset.need=prepared?(D.ITEMS[prepared].r[1][id]||0):0;b.append(stock);}else b.textContent="+";b.setAttribute("aria-label",id?"Retirer : "+name(id):"Emplacement libre");return b;}));
       $("#forge").textContent=actionName(eq,mode,selected.modes[mode]);
       $("#forge").dataset.mode=mode;
-      $("#forge").disabled=!slots.length;$("#forge").title=slots.length?"":"Pose une matière pour travailler.";
+      $("#forge").disabled=!slots.length;$("#forge").title=slots.length?"":"Pose une ressource pour travailler.";
       $("#recipe-preview").textContent=prepared?"Recette préparée : "+name(prepared):"";
       const raw=[...new Set(D.ZONES.filter(z=>E.zoneOpen(z.id)).flatMap(z=>z.res))];
       const items=Object.keys(D.ITEMS).filter(id=>(!E.isEquipmentItem(id)||consumed.has(id))&&(raw.includes(id)||s.seen[id]||E.count(id)>0));

@@ -353,7 +353,7 @@ test("le thermomètre équipé distingue Brûlant, Chaud, Tiède et Froid sans r
   assert.equal(sup.thermo.heat,"brulant");
   assert.ok(sup.thermo.text.includes("superflue"));
   // Indication du nombre d'ingrédients manquants
-  assert.ok(t.thermo.text.includes("matières attendues"));
+  assert.ok(t.thermo.text.includes("ressources attendues"));
   assert.equal(E.serialize(),before);
   // Un seul geste au feu : les matières de l'épieu suffisent, sans réglage (et là, on fabrique)
   assert.equal(E.attemptWith("feu","chauffer",["manche"]).id,"epieu");

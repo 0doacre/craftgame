@@ -173,7 +173,7 @@
     opt = opt || {};
     const it = I[id];
     if (!it) return esc(id);
-    // même règle que la fiche : l’icône dès que l’objet est connu, vu, ou sans recette (matière brute) ;
+    // même règle que la fiche : l’icône dès que l’objet est connu, vu, ou sans recette (ressource brute) ;
     // le nom reste toujours écrit, comme avant les pastilles
     const st = S();
     const known = opt.unk !== undefined ? !opt.unk : !!(st.known[id] || st.seen[id] || !it.r);
@@ -520,7 +520,7 @@
       if (custom && U.mcur && !fresh()) { closeModal(); promptCraftQty(custom.dataset.crCustom); return; }
       const craft = ev.target.closest("[data-tree]");
       if (craft && U.mcur && !fresh()) { openTree(craft.dataset.tree, Number(craft.dataset.n) || 1); return; }
-      // un passage à verser, une matière à voir, depuis une fiche
+      // un passage à verser, une ressource à voir, depuis une fiche
       const pb = ev.target.closest("[data-pour]");
       if (pb && U.mcur && !fresh()) { pour(pb.dataset.pour, pb); if (U.mcur && U.mcur.refresh) box.innerHTML = U.mcur.refresh(); return; }
       const qtb = ev.target.closest("[data-mqtab]");
@@ -919,7 +919,7 @@
   }
   function badge(t) { if (U.tab !== t) { U.badges[t] = true; updateBadges(); if (PARENT[t] === U.tab) render(true); } }
 
-  /* un doigt reste appuyé sur une matière (sa fiche va s’ouvrir) : on ne redessine pas dessous */
+  /* un doigt reste appuyé sur une ressource (sa fiche va s’ouvrir) : on ne redessine pas dessous */
   const pressing = () => !!(U.lp && !U.lp.up);
   function render(force) {
     if (U.appliquerBarre) U.appliquerBarre();
@@ -1119,7 +1119,7 @@
     });
     $$("[data-need]", view).forEach((el) => el.classList.toggle("lack", (st.inv[el.dataset.need] || 0) + 1e-9 < Number(el.dataset.q)));
     $$("[data-cr]", view).forEach((b) => {
-      // ×N et Max lancent une commande (qui démarre même s’il manque des matières premières)
+      // ×N et Max lancent une commande (qui démarre même s’il manque des ressources)
       const id = b.dataset.cr, n = b.dataset.n;
       if (n === "max") {
         const max = E.maxPlan(id);

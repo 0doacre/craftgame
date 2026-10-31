@@ -23,9 +23,9 @@
         return {...base,state:"station",text:b.why==="heat"?"La chaleur disponible est insuffisante pour cette étape.":"Une station ou un geste requis manque pour cette étape.",action:station&&known(E,station)?{kind:"item",id:station,label:"Voir "+name(E,station)}:{kind:"tab",id:"atelier",label:"Voir l’Atelier"}};
       }
       const eq=E.equipmentJobCheck&&E.equipmentJobCheck(step,raw,id=>E.count(id)+(raw.b?.[id]||0));
-      if(eq)return {...base,state:"equipment",text:"Un outil requis n’est plus disponible.",action:known(E,eq.required)?{kind:"item",id:eq.required,label:"Voir "+name(E,eq.required)}:{kind:"tab",id:"atelier",label:"Voir les outils"}};
+      if(eq)return {...base,state:"equipment",text:"Un outil requis n’est plus disponible.",action:known(E,eq.required)?{kind:"item",id:eq.required,label:"Voir "+name(E,eq.required)}:{kind:"tab",id:"labo",label:"Voir les outils"}};
       const miss=Object.keys(j.miss||{}).filter(id=>j.miss[id]>1e-9);
-      // Une matière de l'étape en cours passe avant les besoins futurs de la chaîne.
+      // Une ressource de l'étape en cours passe avant les besoins futurs de la chaîne.
       miss.sort((a,b)=>Number(!!it?.r?.[1][b])-Number(!!it?.r?.[1][a]));
       if(miss.length){
         const id=miss[0],n=Math.ceil(j.miss[id]),l=E.limiting(id,n);
@@ -35,7 +35,7 @@
             text:!l.open?"Une ressource nécessaire vient d’une terre encore fermée.":e?.on===false?"L’extraction de "+name(E,id)+" est en pause.":l.rate>0?"La commande attend "+name(E,id)+" ; l’extraction continue.":"Aucune extraction active de "+name(E,id)+" n’alimente cette commande.",
             action:l.open?{kind:"zone",id:l.z,label:"Voir le gisement"}:{kind:"tab",id:"carte",label:"Voir la carte"}};
         }
-        return {...base,state:"component",resource:id,missing:n,text:"Il manque une pièce : "+name(E,id)+".",action:known(E,id)?{kind:"item",id,label:"Voir le composant"}:{kind:"tab",id:"atelier",label:"Chercher la recette"}};
+        return {...base,state:"component",resource:id,missing:n,text:"Il manque une pièce : "+name(E,id)+".",action:known(E,id)?{kind:"item",id,label:"Voir la pièce"}:{kind:"tab",id:"labo",label:"Chercher la recette"}};
       }
       const earlier=hi.jobs.slice(0,index).some(x=>x.hand||Object.keys(x.machs||{}).length);
       return {...base,state:earlier?"queue":"preparation",text:earlier?"Les mains ou les machines travaillent sur une commande précédente.":"Les pièces de cette commande sont encore en préparation."};

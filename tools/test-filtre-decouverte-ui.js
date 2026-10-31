@@ -42,7 +42,7 @@ async function main(){
         await p.locator('[data-g="tailler"]').click();
         await p.evaluate(()=>window.__eclat.E.learn("manche",true));
         await p.waitForFunction(()=>document.querySelectorAll('#v-atelier [data-inv]').length===0);
-        check((await p.locator('#v-atelier').innerText()).includes("Aucune matière étudiée"),prefix+" état vide explicite après découverte");
+        check((await p.locator('#v-atelier').innerText()).includes("Aucune ressource étudiée"),prefix+" état vide explicite après découverte");
         await p.evaluate(()=>window.__eclat.E.study("cuir"));
         await p.waitForSelector('[data-inv="cuir"]');assert.deepEqual(await ids(),["cuir"]);checks++;
         await p.locator('#iq').fill('bois');await p.waitForTimeout(250);assert.deepEqual(await ids(),[]);checks++;

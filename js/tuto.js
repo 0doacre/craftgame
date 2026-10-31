@@ -16,10 +16,10 @@
     const has = (id) => (S().inv[id] || 0) >= 1;
     const anyExt = () => Object.keys(S().dom.ext).length > 0;
     const modalOpen = () => !!document.querySelector(".modal:not(.hidden)");
-    /* une matière de l’Atelier qui cache encore des recettes à tenter dès maintenant : celle-là vaut la peine d’être étudiée */
+    /* une ressource de l’Atelier qui cache encore des recettes à tenter dès maintenant : celle-là vaut la peine d’être étudiée */
     function studyTile() {
       const tiles = Array.from(document.querySelectorAll(E.equipmentList?"[data-ae-resource]":"[data-inv]"));
-      // une matière que la joueuse peut vraiment tenter maintenant : l’étude lui montrera au moins une action qui réagit
+      // une ressource que la joueuse peut vraiment tenter maintenant : l’étude lui montrera au moins une action qui réagit
       const ok = tiles.find((t) => {const id=t.dataset.aeResource||t.dataset.inv;return !S().studied[id] && E.usesLeft(id) > 0;});
       return ok || null;
     }
@@ -48,7 +48,7 @@
           { tab: "domaine", at: '[data-hloop="lisiere:bois"]', text: "▶ Récolter : récolte en continu. Touche encore pour arrêter. L’icône du bois récolte un seul coup.",
             done: () => (S().inv.bois || 0) >= 3 || S().known.manche },
           { tab: "labo", go: "Ouvre le Labo.", at: E.equipmentList ? ".ae-tools" : ".gestes",
-            text: E.equipmentList ? "Choisis ton outil, pose tes matières, puis utilise son geste. Le percuteur taille, les mains assemblent ou tressent." : "Une recette = une action + des ressources. Actions de départ : Tailler, Tresser, Assembler.", next: true, done: () => S().known.manche || U.slots.some(Boolean) },
+            text: E.equipmentList ? "Choisis ton outil, pose tes ressources, puis utilise son geste. Le percuteur taille, les mains assemblent ou tressent." : "Une recette = une action + des ressources. Actions de départ : Tailler, Tresser, Assembler.", next: true, done: () => S().known.manche || U.slots.some(Boolean) },
           { tab: "labo", at: () => (U.slots.includes("bois") ? null : E.equipmentList ? '#ae-item-bois' : '[data-inv="bois"]'), text: "Touche le bois pour le poser sur l’établi.",
             done: () => U.slots.includes("bois") || S().known.manche },
           { tab: "labo", at: () => E.equipmentList ? (U.geste === "tailler" ? '#ae-forge-tailler' : '#ae-tool-percuteur_pierre') : (U.geste === "tailler" ? "#forge" : '[data-g="tailler"]'), text: () => (U.geste === "tailler" ? "Lance Tailler pour fabriquer ton premier objet." : "Choisis l’action Tailler."),
@@ -172,13 +172,13 @@
           // hors des fenêtres : la bulle ne recouvre pas leurs boutons
           { text: "Compris : partout où ce signe apparaît, il se lit désormais en mot. Les autres se trouvent dans le Journal, onglet Signes.", next: true }
         ] },
-      { id: "etude", n: "Étudier tes matières",
+      { id: "etude", n: "Étudier tes ressources",
         when: () => U.tab === "labo" && S().intu >= 1 && !Object.keys(S().studied).length && Object.keys(S().known).length >= 4 && !!document.querySelector('[data-ae="study"]:not(:disabled)'),
         still: () => !Object.keys(S().studied).length,
         steps: [
-          { tab: "labo", at: '[data-ae="study"]', text: "Touche « Étudier » : un peu d’Intuition ✨ te dit quelles matières cachent encore des recettes avec l’outil et le geste choisis.",
+          { tab: "labo", at: '[data-ae="study"]', text: "Touche « Étudier » : un peu d’Intuition ✨ te dit quelles ressources cachent encore des recettes avec l’outil et le geste choisis.",
             done: () => Object.keys(S().studied).length > 0 },
-          { tab: "labo", at: '[data-ae="filtre"][data-value="utiles"]', dim: false, text: "Le filtre « Utiles » ne montre plus que les matières qui réagissent. À toi de trouver la bonne combinaison.", next: true }
+          { tab: "labo", at: '[data-ae="filtre"][data-value="utiles"]', dim: false, text: "Le filtre « Utiles » ne montre plus que les ressources qui réagissent. À toi de trouver la bonne combinaison.", next: true }
         ] },
       { id: "suivre", n: "Suivre une recette",
         when: () => !S().track && U.tab === "carnet" && S().stats.crafts <= 80 && S().age <= 4 && Object.keys(S().known).length >= 5 && !!document.querySelector("[data-track]"),

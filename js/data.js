@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.60.2";
+  D.VERSION = "0.61.0";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -1031,8 +1031,8 @@
     },
     premiere_etude: {
       n: "L’œil attentif", ic: "🔍",
-      t: "Étudier une matière à la loupe avec de l’Intuition.",
-      hint: "Regarder une matière de plus près.",
+      t: "Étudier une ressource à la loupe avec de l’Intuition.",
+      hint: "Regarder une ressource de plus près.",
       when: (st) => !!(st.studied && Object.keys(st.studied).length > 0)
     },
     premier_dechiffrage: {
@@ -1085,7 +1085,7 @@
     },
     toutes_matieres: {
       n: "L’encyclopédie des mains", ic: "🔬",
-      t: "Avoir étudié chaque matière première du monde.",
+      t: "Avoir étudié chaque ressource du monde.",
       hint: "Ne laisser aucune ressource brute inexplorée.",
       when: (st) => {
         const mats = Object.keys(D.ITEMS).filter((i) => D.ITEMS[i].t === "res" && !D.ITEMS[i].sec);
@@ -1201,7 +1201,7 @@
    * { k: "exp", z: zone, x: exploration }, { k: "ext" } (poser et relier un extracteur)
    * ou { k: "line" } (faire tourner une machine). */
   D.OBJECTIVES = [
-    ["manche", "Récolte du bois, puis taille un manche à l’Atelier."],
+    ["manche", "Récolte du bois, puis taille un manche au Labo."],
     ["corde", "Tresse des fibres pour faire une corde."],
     { k: "exp", z: "lisiere", x: "chene", n: "Explorer le Grand Chêne", txt: "Explore le Grand Chêne depuis la Lisière. L’exploration avance seule." },
     ["feu", "La nuit tombe. Construis un feu de camp : il ouvre le geste Chauffer."],
@@ -1363,7 +1363,7 @@
     },
     {
       id: "trans_mach",
-      n: "Surcadence des ateliers",
+      n: "Surrégime des machines",
       ic: "⚙️",
       d: "Vitesse des machines et des commandes ×{v}.",
       v: (l) => Math.round(Math.pow(1.6, l) * 100) / 100,
@@ -1462,7 +1462,7 @@
   /* Réminiscences de guidage : quand le joueur cherche (combinaisons nouvelles à
    * l’Atelier), la narratrice présente les pistes comme des souvenirs. */
   D.GUIDE = {
-    tries: [6, 14, 26], // souvenirs à réunir pour le geste, une matière, puis la recette
+    tries: [6, 14, 26], // souvenirs à réunir pour le geste, une ressource, puis la recette
     lines: [
       ["Tu retrouves le geste sans savoir où tu l’as appris : {g}.",
         "Tes doigts esquissent un mouvement tout seuls, avant que tu y penses : {g}.",
@@ -1574,8 +1574,8 @@
   D.VOIX = {
     cooldown: 600, manqueApres: 30, previsionSous: 300, retourApres: 300, histoMax: 20,
     metiers: {
-      artisanat: { retour: "Patron, pendant votre absence, l’atelier a fait : {liste}.", manque: "Patron, nous manquons {de} à l’établi !", prevision: "Patron, nous allons bientôt manquer {de}.",
-        fatigue: "Patron, les mains sont lasses : on ne tiendra pas ce rythme longtemps.", greve: "Patron, l’atelier pose les outils : grève, tant qu’on n’a pas soufflé !", reprise: "Patron, l’atelier a repris son souffle et se remet à l’ouvrage." },
+      artisanat: { retour: "Patron, pendant votre absence, nous avons fabriqué : {liste}.", manque: "Patron, nous manquons {de} à l’établi !", prevision: "Patron, nous allons bientôt manquer {de}.",
+        fatigue: "Patron, les mains sont lasses : on ne tiendra pas ce rythme longtemps.", greve: "Patron, on pose les outils : grève, tant qu’on n’a pas soufflé !", reprise: "Patron, nous avons repris notre souffle et nous nous remettons à l’ouvrage." },
       construction: { retour: "Chef, le chantier n’a pas chômé : {liste}.", manque: "Chef, le chantier manque {de} !", prevision: "Chef, le chantier va bientôt manquer {de}.",
         fatigue: "Chef, les gars sont sur les rotules.", greve: "Chef, le chantier est à l’arrêt : les bâtisseurs font grève !", reprise: "Chef, le chantier repart." },
       elevage: { retour: "Patron, les bêtes ont donné pendant votre absence : {liste}.", manque: "Patron, l’étable manque {de} !", prevision: "Patron, l’étable va bientôt manquer {de}.",
@@ -1630,11 +1630,11 @@
     seuilDefaut: 10,
     /* les paliers du seuil, nommés (le joueur ne voit pas de pourcentage) : p = part du stock de confort jusqu'à laquelle on fabrique */
     paliers: [
-      { p: 0, n: "Au repos", d: "Personne ne fabrique seul : les travailleurs ne servent que ta file de commandes." },
-      { p: 10, n: "Au jour le jour", d: "Juste de quoi ne pas être pris de court : un petit stock de chaque pièce." },
-      { p: 30, n: "Quelques réserves", d: "Un peu d’avance sur chaque pièce, de quoi tenir une absence." },
-      { p: 50, n: "Bien garni", d: "Les étagères se remplissent à moitié : beaucoup de matière part en pièces." },
-      { p: 100, n: "À ras bord", d: "Toute pièce connue monte jusqu’à son plein stock. Gourmand en matières premières." }
+      { p: 0, n: "À l’arrêt", d: "Personne ne fabrique seul : les travailleurs ne servent que ta file de commandes." },
+      { p: 10, n: "Au jour le jour", d: "Juste de quoi ne pas être pris de court : une petite réserve de chaque pièce." },
+      { p: 30, n: "Quelques provisions", d: "Un peu d’avance sur chaque pièce, de quoi tenir une absence." },
+      { p: 50, n: "Bien garni", d: "Les étagères se remplissent à moitié : beaucoup de ressources partent en pièces." },
+      { p: 100, n: "À ras bord", d: "Toute pièce connue monte jusqu’à la réserve pleine. Gourmand en ressources." }
     ],
     confort: { base: 20, parAge: 1.5, max: 200 },
     /* 0.51 : chaque métier a ses travailleurs, nommés d'après ce qu'ils font (affichage seulement : le jeu garde « apprenti » et « ouvrier ») */
@@ -1725,6 +1725,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "🏷️ Passe de vocabulaire. Un seul mot par chose : « ressource » partout (plus de « matière »), « essayer » et « essai » (plus de « tenter »), des « consignes » pour garder une réserve (plus de « stock » ni de « cadence »). Les paliers du seuil deviennent « À l’arrêt » et « Quelques provisions », la découverte se fait toujours « au Labo », et les voix des travailleurs ne parlent plus de « l’atelier ». Les anciens textes de l’apprenti à l’établi sont retirés.",
     "🧑‍🔧 Les portraits des travailleurs changent de nom de fichier : un téléphone qui garde un ancien morceau du jeu ne mélange plus ancien code et nouvelles images (le forgeron apparaissait en double).",
     "🏷️ Au Labo, le « poste » devient la « station » (Mains, Feu de camp, Enclume…) : « ← Stations et outils », « Choisir cette station », « sur cette station ». L’établi reste la surface où tu poses tes matières.",
     "🧑‍🔧 De nouveaux visages pour les travailleurs. Les huit métiers ont maintenant un même personnage qui traverse les âges, du Néolithique au futur : une personne par métier, reconnaissable d’un échelon à l’autre.",

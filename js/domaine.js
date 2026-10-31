@@ -34,7 +34,7 @@
       if (d.hand || E.domExt(z, d.res)) return true;
       return E.extFor(d.res, z).some((t) => S().known[t] || E.count(t) >= 1);
     }
-    // Un extracteur neuf peut révéler une matière dans une terre ancienne repliée.
+    // Un extracteur neuf peut révéler une ressource dans une terre ancienne repliée.
     // Le rappel reste jusqu’à sa pose, y compris après rechargement de la partie.
     function nouveauxGisementsHTML() {
       const deps = E.deposits().filter((d) => !d.hand && !E.domExt(d.z, d.res));
@@ -168,7 +168,7 @@
       if (k === "obj") corps = api.top();
       else if (k === "rel") {
         const s = E.shouldSuggestReleve && E.shouldSuggestReleve();
-        corps = s ? '<p class="small">Les matières deviennent lourdes à arracher et les mains fatiguent. En passant le relais maintenant, tu transmettras <b>+' + s.gain + ' Souvenirs</b> pour éveiller un Semeur aux récoltes démultipliées.</p><button class="btn pri" data-m="releve">Passer le relais (+' + s.gain + " ✦)</button>" : "";
+        corps = s ? '<p class="small">Les ressources deviennent lourdes à arracher et les mains fatiguent. En passant le relais maintenant, tu transmettras <b>+' + s.gain + ' Souvenirs</b> pour éveiller un Semeur aux récoltes démultipliées.</p><button class="btn pri" data-m="releve">Passer le relais (+' + s.gain + " ✦)</button>" : "";
       } else if (k === "comptoir") corps = E.zoneOpen(D.COMPTOIR.zone) ? comptoirHTML() : "";
       else if (k === "oeuvre") corps = Object.keys(D.PROJECTS).filter((pid) => E.projVisible(pid) && E.projState(pid).step < D.PROJECTS[pid].steps.length).map(oeuvreHTML).join("");
       else if (k === "prod") corps = (domaineMachinesSummary() + prodHTML()) || '<p class="small muted">Rien ne tourne encore ici : les machines et les extracteurs apparaîtront dans cette feuille.</p>';
@@ -205,7 +205,7 @@
       if (sugRel) {
         h += '<div class="card acc releve-alerte" style="margin:8px 0 10px;border-left:3px solid var(--acc);background:var(--panel2)">' +
           '<div class="row between items-center"><span class="step-badge">✦ Relais conseillé</span><b class="mgain">+' + sugRel.gain + ' ✦</b></div>' +
-          '<p class="small" style="margin:6px 0 8px">Les matières deviennent lourdes à arracher et les mains fatiguent. En passant le relais maintenant, tu transmettras <b>+' + sugRel.gain + ' Souvenirs</b> pour éveiller un Semeur aux récoltes démultipliées.</p>' +
+          '<p class="small" style="margin:6px 0 8px">Les ressources deviennent lourdes à arracher et les mains fatiguent. En passant le relais maintenant, tu transmettras <b>+' + sugRel.gain + ' Souvenirs</b> pour éveiller un Semeur aux récoltes démultipliées.</p>' +
           '<button class="btn pri small" data-m="releve" title="Voir les gains de Souvenirs et les bonus de la prochaine relève">Passer le relais (+' + sugRel.gain + ' ✦)</button></div>';
       }
       const all = U.domAll || zs.length <= SHOWN + 1;
@@ -302,7 +302,7 @@
         '</div>' +
         '<p class="contemplation-desc">« ' + esc(Z.d || "") + ' »</p>' +
         '<div class="contemplation-meta">' +
-          '<div class="contemplation-res"><small>Matières de la terre :</small><div>' + (resList || "<span>Aucune</span>") + '</div></div>' +
+          '<div class="contemplation-res"><small>Ressources de la terre :</small><div>' + (resList || "<span>Aucune</span>") + '</div></div>' +
           '<div class="contemplation-exp"><small>Lieux explorés :</small> <b>' + done + ' / ' + total + '</b></div>' +
         '</div>' +
         '<div class="acts carnet-acts">' +
@@ -874,7 +874,7 @@
       const cads = E.cadences ? E.cadences() : [];
       const elig = E.cadenceEligible ? E.cadenceEligible() : [];
       if (owned.length || cads.length) {
-        h += '<h3 class="sub" style="margin-top:16px">🔄 Maintien de stock (machines au repos)</h3>';
+        h += '<h3 class="sub" style="margin-top:16px">🔄 Consignes (machines au repos)</h3>';
         h += '<p class="tiny muted" style="margin-top:-4px;margin-bottom:8px">Quand aucune commande ne les réclame, tes machines libres maintiennent ces réserves jusqu’au seuil choisi.</p>';
         if (cads.length) {
           cads.forEach((c) => {
@@ -894,15 +894,15 @@
               '<div class="grow"><b>' + esc(it.n) + '</b> <span class="tiny muted">· <span data-c="' + c.id + '">' + fmt(c.have) + '</span> / ' + fmt(c.cap) + '</span>' +
               '<div>' + stBadge + '</div></div></div>' +
               '<div class="row wrap" style="gap:4px;align-items:center">' +
-              [50, 100, 250, 500].map((q) => '<button class="btn mini' + (c.cap === q ? " pri" : " ghost") + '" data-cad-cap="' + c.id + '" data-n="' + q + '" title="Maintenir le stock jusqu’à ' + q + '">' + q + '</button>').join("") +
-              '<button class="btn mini ghost" data-cad-toggle="' + c.id + '" title="' + (c.on ? "Mettre en pause ce maintien de stock" : "Reprendre ce maintien de stock") + '">' + (c.on ? "⏸" : "▶") + '</button>' +
-              '<button class="btn mini ghost" data-cad-del="' + c.id + '" title="Retirer ce maintien de stock" aria-label="Retirer ' + esc(it.n) + '">✕</button>' +
+              [50, 100, 250, 500].map((q) => '<button class="btn mini' + (c.cap === q ? " pri" : " ghost") + '" data-cad-cap="' + c.id + '" data-n="' + q + '" title="Garder jusqu’à ' + q + ' en réserve">' + q + '</button>').join("") +
+              '<button class="btn mini ghost" data-cad-toggle="' + c.id + '" title="' + (c.on ? "Mettre cette consigne en pause" : "Reprendre cette consigne") + '">' + (c.on ? "⏸" : "▶") + '</button>' +
+              '<button class="btn mini ghost" data-cad-del="' + c.id + '" title="Retirer cette consigne" aria-label="Retirer ' + esc(it.n) + '">✕</button>' +
               '</div></div></section>';
           });
         }
         if (elig.length) {
           h += '<div class="row wrap" style="gap:6px;margin-top:6px;align-items:center"><span class="tiny muted">Ajouter :</span>' +
-            elig.map((id) => '<button class="btn mini ghost" data-cad-add="' + id + '" title="Maintenir automatiquement un stock de ' + esc(I[id].n.toLowerCase()) + '">+ ' + icon(id, "sm") + " " + esc(I[id].n) + '</button>').join("") +
+            elig.map((id) => '<button class="btn mini ghost" data-cad-add="' + id + '" title="Garder ' + esc(I[id].n.toLowerCase()) + ' en réserve automatiquement">+ ' + icon(id, "sm") + " " + esc(I[id].n) + '</button>').join("") +
             '</div>';
         } else if (!cads.length) {
           h += '<p class="tiny muted">Fabrique au moins une fois une recette automatisable pour la confier à tes machines au repos.</p>';
@@ -929,7 +929,7 @@
             '</div></section>';
         });
       } else {
-        h += '<p class="small muted" style="padding:6px 0">Tu n’as pas encore de machine. La première se découvre à l’Atelier : l’automate de bois.</p>';
+        h += '<p class="small muted" style="padding:6px 0">Tu n’as pas encore de machine. La première se découvre au Labo : l’automate de bois.</p>';
       }
       h += '</div>';
       return h;
@@ -1105,7 +1105,7 @@
               '</b>. Le Comptoir reste ouvert pour vendre et acheter.</p>';
           } else {
             if (!asks.length) {
-              h += '<p class="small muted center" style="padding:20px 0">Le Troqueur n’a pas de demande pour l’instant. Fabrique des objets de ton âge, avec des matières que tu récoltes.</p>';
+              h += '<p class="small muted center" style="padding:20px 0">Le Troqueur n’a pas de demande pour l’instant. Fabrique des objets de ton âge, avec des ressources que tu récoltes.</p>';
             } else {
               h += '<div class="comptoir-list">' + asks.map(askRowHTML).join("") + '</div>';
             }
@@ -1350,7 +1350,7 @@
             '<button class="mini" data-m="eu" data-t="' + t + '" data-v="-1"' + (cur ? "" : " disabled") + ">−</button><b>" + cur + '</b><button class="mini" data-m="eu" data-t="' + t + '" data-v="1" aria-label="Un de plus">+</button>' +
             '<button class="mini" data-m="eu" data-t="' + t + '" data-v="10" aria-label="Dix de plus">+10</button></div>';
         }).join("") + "</div>";
-      } else h += '<p class="small muted">Extracteur non découvert. Recette à chercher à l’Atelier.</p>';
+      } else h += '<p class="small muted">Extracteur non découvert. Recette à chercher au Labo.</p>';
       if (dep && dep.hand) h += '<p class="tiny muted">Tu peux aussi récolter à la main : touche son icône dans les Terres, ou garde le doigt dessus.</p>';
       if (z === "mine") {
         const total = e ? Object.values(e.u).reduce((a, b) => a + b, 0) : 0;
@@ -1456,8 +1456,8 @@
           return '<div class="row wrap reprise-row"><button class="btn small ghost" data-m="repriseSelect" data-i="' + i + '" aria-pressed="' + r.selected + '" aria-label="' + esc((r.selected ? 'Retirer ' : 'Inclure ') + I[r.id].n) + '">' + (r.selected ? '☑' : '☐') + '</button><span class="grow small">' + esc(I[r.id].n) + ' · reste ' + r.left + ' / ' + r.n + (r.z ? ' · ' + esc(E.ZONES[r.z].n) + ' / ' + esc(I[r.res].n) : '') + '<br><span class="tiny muted">' + esc(E.repriseStatus(r)) + (ready ? ' · ' + ready : '') + '</span></span></div>';
         }).join('') + '</div>';
         const costs = Object.entries(quote.cost).map(([id, n]) => esc(I[id].n) + ' ×' + fmt(n)).join(', ');
-        h += '<p class="small"><b>Ce lancement : ' + quote.actions.length + ' opération(s)</b> · jusqu’à 24 par lancement. Réparations et poses sont immédiates ; les fabrications rejoignent les commandes.</p><p class="small">À dépenser ou réserver : <b>' + (costs || 'aucune matière') + '</b>.</p>';
-        if (!quote.actions.length && !result) h += '<p class="small">' + (E.repriseRows().filter(r => r.selected).every(r => E.repriseStatus(r) === 'Reconstitué') ? 'La sélection est déjà reconstituée.' : 'Aucun travail prêt. Termine les commandes, réunis les matières ou rouvre les terres, puis actualise.') + '</p>';
+        h += '<p class="small"><b>Ce lancement : ' + quote.actions.length + ' opération(s)</b> · jusqu’à 24 par lancement. Réparations et poses sont immédiates ; les fabrications rejoignent les commandes.</p><p class="small">À dépenser ou réserver : <b>' + (costs || 'aucune ressource') + '</b>.</p>';
+        if (!quote.actions.length && !result) h += '<p class="small">' + (E.repriseRows().filter(r => r.selected).every(r => E.repriseStatus(r) === 'Reconstitué') ? 'La sélection est déjà reconstituée.' : 'Aucun travail prêt. Termine les commandes, réunis les ressources ou rouvre les terres, puis actualise.') + '</p>';
         if (result) h += '<p role="status" class="small">' + esc(result) + '</p>';
         return h + '<div class="row wrap"><button class="btn pri" data-m="repriseApply" title="Exécuter uniquement les réparations, poses et commandes détaillées dans ce devis"' + (quote.actions.length ? '' : ' disabled') + '>Lancer ces travaux</button><button class="btn ghost" data-m="repriseRefresh" title="Recalculer les travaux possibles avec les ressources disponibles maintenant">Actualiser le devis</button></div>';
       }
@@ -1538,7 +1538,7 @@
       if ((b = t.closest("[data-cad-add]"))) {
         const rec = b.dataset.cadAdd;
         const r = E.setCadence && E.setCadence(rec, 100, true);
-        if (r && r.ok) { A.click(); toast("🔄 Maintien de stock : <b>" + esc(I[rec].n) + "</b> (jusqu’à 100)."); render(true); }
+        if (r && r.ok) { A.click(); toast("🔄 Consigne : garder <b>" + esc(I[rec].n) + "</b> en réserve (jusqu’à 100)."); render(true); }
         return true;
       }
       if ((b = t.closest("[data-cad-cap]"))) {
@@ -1595,7 +1595,7 @@
         const ids = b.dataset.repairAll.split(",").filter((id) => I[id]);
         const n = E.repairAll(ids);
         if (n > 0) { A.init(); A.click(); vibe([10, 30, 10]); toast("🛖 " + n + (n > 1 ? " ruines relevées." : " ruine relevée."), { key: "repair" }); }
-        else { A.fail(0); toast("Rien à relever pour l’instant : il manque des matières.", { key: "repair" }); }
+        else { A.fail(0); toast("Rien à relever pour l’instant : il manque des ressources.", { key: "repair" }); }
         render(true);
         return true;
       }

@@ -1,5 +1,5 @@
 /* ÉCLAT — l’Atelier et le Carnet.
- * L’établi (gestes, emplacements, matières, résultat), le Carnet et les Machines ;
+ * L’établi (gestes, emplacements, ressources, résultat), le Carnet et les Machines ;
  * l’œuvre et les commandes, les mains, l’action qui tourne, les niveaux des gestes ;
  * les fiches d’objets et l’arbre de fabrication. */
 (function () {
@@ -48,7 +48,7 @@
         (lvl >= 2 ? '<div class="tiny muted">💭 Une des ressources : ' + icon(mainIngredient(id), "sm") + " " + esc(I[mainIngredient(id)].n) + "</div>" : "") +
         memBar + acts + "</div>";
     }
-    /* Le Labo (0.39) : l’établi d’essai, rien d’autre. Les matières se choisissent dans une rangée,
+    /* Le Labo (0.39) : l’établi d’essai, rien d’autre. Les ressources se choisissent dans une rangée,
      * la liste complète s’ouvre dans un panneau de la vue. */
     function recettesTrouvees() {
       const all = Object.keys(I).filter((id) => I[id].r && !I[id].sec && !I[id].path && !I[id].old && I[id].t !== "curio");
@@ -113,22 +113,22 @@
       h += labMatieres();
       return h + "</div>" + (U.labSearch ? labRecherche() : "");
     }
-    /* la rangée de matières : les favorites, les plus récentes, puis ce qui est en stock */
+    /* la rangée de ressources : les favorites, les plus récentes, puis ce qui est en stock */
     function labMatieres() {
       const st = S(), fv = favs();
       const score = (id) => (fv[id] ? 1e6 : 0) + (+st.seen[id] || 0) + (st.inv[id] >= 1 ? 1e3 : 0);
       const ids = invItems().slice().sort((a, b) => score(b) - score(a)).slice(0, 14);
-      let h = '<div class="labo-matieres" role="group" aria-label="Matières récentes">';
+      let h = '<div class="labo-matieres" role="group" aria-label="Ressources récentes">';
       ids.forEach((id) => {
         const sel = U.slots.includes(id), stock = st.inv[id] >= 1;
         h += '<button class="inv labo-mat' + (sel ? " sel" : "") + (stock ? "" : " zero") + '" data-inv="' + id + '" title="' + esc(I[id].n) + '" aria-label="' + esc(I[id].n) + (stock ? "" : ", échantillon") + '">' + icon(id) +
           '<span class="n">' + esc(I[id].n) + "</span>" + (stock ? '<span class="c" data-c="' + id + '">' + fmt(st.inv[id]) + "</span>" : '<span class="labo-echantillon">échantillon</span>') + "</button>";
       });
-      return h + '<button class="btn labo-plus" data-labsearch="1">Rechercher une matière</button></div>';
+      return h + '<button class="btn labo-plus" data-labsearch="1">Rechercher une ressource</button></div>';
     }
     /* la liste complète, filtres compris, dans un panneau qui défile seul */
     function labRecherche() {
-      return '<div class="labo-recherche" role="dialog" aria-label="Rechercher une matière"><div class="labo-recherche-tete"><b>Matières</b><button class="btn small" data-labsearch="0">Fermer</button></div><div class="labo-recherche-corps">' + invBlockHTML() + "</div></div>";
+      return '<div class="labo-recherche" role="dialog" aria-label="Rechercher une ressource"><div class="labo-recherche-tete"><b>Ressources</b><button class="btn small" data-labsearch="0">Fermer</button></div><div class="labo-recherche-corps">' + invBlockHTML() + "</div></div>";
     }
     function invBlockHTML() {
       const st = S();
@@ -183,7 +183,7 @@
         });
       } else h += '<div class="inv-grid">' + inv.map(tile).join("") + "</div>";
       if (!inv.length) {
-        const emptyMsg = o.filter === "tryg" ? "Aucune matière étudiée ne cache de recette à découvrir avec ce geste, pour l’instant. Tu peux étudier d’autres matières ou changer de geste."
+        const emptyMsg = o.filter === "tryg" ? "Aucune ressource étudiée ne cache de recette à découvrir avec ce geste, pour l’instant. Tu peux étudier d’autres ressources ou changer de geste."
           : o.filter === "fav" ? "Aucune ressource favorite. Appui long sur une ressource pour la marquer d’un ♥."
           : o.filter === "flow" ? "Aucun flux actif en ce moment. Pose des extracteurs ou lance des machines."
           : (U.iq || o.filter !== "tout" ? "Aucun résultat pour cette recherche ou ces filtres." : !(st.stats.crafts > 0) ? "Le bois récolté apparaîtra ici." : "Aucune ressource disponible. Récolte dans les Terres pour remplir ta Réserve.");
@@ -197,7 +197,7 @@
       if (sa.n < 2 || Object.keys(st.studied).length < 1) return "";
       const lack = st.intu < sa.c;
       return '<div class="study-all"><button class="btn small" data-study-all' + (lack ? " disabled" : "") + '>🔍 Étudier tout · ✨' + fmt(sa.c) + '</button><span class="tiny muted">' +
-        (lack ? "Il te manque " + fmt(sa.c - st.intu) + " ✨ pour étudier les " + sa.n + " ressources." : sa.n + " ressources pas encore étudiées. Ensuite, le filtre 🔍 À tenter montre celles qui servent encore.") + "</span></div>";
+        (lack ? "Il te manque " + fmt(sa.c - st.intu) + " ✨ pour étudier les " + sa.n + " ressources." : sa.n + " ressources pas encore étudiées. Ensuite, le filtre 🔍 À essayer montre celles qui servent encore.") + "</span></div>";
     }
     const INV_SORTS = [
       ["age", "Par âge"],
@@ -216,7 +216,7 @@
       fav: "Celles que tu as marquées d’un ♥",
       new: "Celles qu’aucune recette connue n’utilise encore",
       try: "Les ressources étudiées qui cachent encore une recette",
-      tryg: "Les matières étudiées qui cachent encore une recette avec le geste choisi"
+      tryg: "Les ressources étudiées qui cachent encore une recette avec le geste choisi"
     };
     const INV_FILTERS = [
       ["tout", "Tout", ""],
@@ -226,7 +226,7 @@
       ["geste", "Action", "✦"],
       ["fav", "Favoris", "♥"],
       ["new", "Inutilisées", "✨"],
-      ["try", "À tenter", "🔍"],
+      ["try", "À essayer", "🔍"],
       ["tryg", "À découvrir", "✦"]
     ];
     function invCounts() {
@@ -299,7 +299,7 @@
         },
         new: (a, b) => (+st.seen[b] || 0) - (+st.seen[a] || 0) || byAge(b, a)
       };
-      // une matière déjà eue reste dans la liste à 0 : sa place ne bouge pas, et on peut encore la poser sur l’établi
+      // une ressource déjà eue reste dans la liste à 0 : sa place ne bouge pas, et on peut encore la poser sur l’établi
       // (une recette comprise propose alors de fabriquer ce qui manque)
       return Array.from(new Set(Object.keys(st.inv).concat(Object.keys(st.seen)))).filter((id) => {
         const it = I[id];
@@ -586,7 +586,7 @@
         '<span class="arb-status">' + esc(arbreEtat(n)) + '</span>' +
         (n.objectif ? '<span class="arb-objectif">Objectif</span>' : '') + '</span></' + tag + '>';
     }
-    /* la place d’une pastille dans son âge : les matières d’abord, puis les recettes de la moins profonde à la plus profonde, les pistes à la fin */
+    /* la place d’une pastille dans son âge : les ressources d’abord, puis les recettes de la moins profonde à la plus profonde, les pistes à la fin */
     function arbreRang(n, g) {
       if (n.etat === "fantome") return 99;
       if (n.etat === "vu") return 0;
@@ -616,7 +616,7 @@
       const f = U.arbreFiltre || "tout";
       const FILTRES = [
         ["tout", "Toutes", "Afficher toutes les pastilles"],
-        ["portee", "À portée", "Afficher les recettes prêtes ou dont les matières sont récoltables"],
+        ["portee", "À portée", "Afficher les recettes prêtes ou dont les ressources sont récoltables"],
         ["pret", "Prêtes", "Afficher les recettes fabricables immédiatement avec ta Réserve"],
         ["verrouille", "Verrouillées", "Afficher les recettes avec un prérequis manquant ou non découvertes"]
       ];
@@ -650,13 +650,13 @@
       if (objectif) h += '<h3>Prochain objectif</h3>' + arbreCarte(objectif, false);
       else if (ob) h += '<h3>Prochain objectif</h3><p>' + esc(ob.txt || ob.n || 'Poursuivre l’exploration') + '</p>';
       else h += '<p>Tu as accompli les objectifs proposés.</p>';
-      h += '</section><h3 class="arb-parcours-titre">Tes découvertes par âge</h3><div class="arb-legende" aria-hidden="true"><span><i class="allume"></i>trouvée</span><span><i class="vu"></i>matière vue</span><span><i class="fantome"></i>à trouver</span><span><i class="obj"></i>objectif</span><span><i class="neuf-i"></i>nouveau</span></div>';
+      h += '</section><h3 class="arb-parcours-titre">Tes découvertes par âge</h3><div class="arb-legende" aria-hidden="true"><span><i class="allume"></i>trouvée</span><span><i class="vu"></i>ressource vue</span><span><i class="fantome"></i>à trouver</span><span><i class="obj"></i>objectif</span><span><i class="neuf-i"></i>nouveau</span></div>';
       for (let a = 0; a <= g.max; a++) {
         const ns = g.noeuds.filter((n) => n.age === a);
         const ouverts = U.arbreAges || {};
         const visibles = f === "tout" ? ns : ns.filter((n) => arbrePassPortee(n, f));
         const ouvert = ouverts[a] !== undefined ? ouverts[a] : (f !== "tout" ? visibles.length > 0 : a === Math.min(g.age, g.max));
-        /* Le décompte d'un âge = ce que montre la grille : les recettes trouvées, sur les recettes montrées (trouvées + cases « ? »). Les matières vues ont leur propre rangée ; une recette secrète n'entre dans le compte qu'une fois trouvée. */
+        /* Le décompte d'un âge = ce que montre la grille : les recettes trouvées, sur les recettes montrées (trouvées + cases « ? »). Les ressources vues ont leur propre rangée ; une recette secrète n'entre dans le compte qu'une fois trouvée. */
         const estRecette = (n) => !(n.id && I[n.id] && !I[n.id].r);
         const recettesAge = ns.filter(estRecette);
         const c = recettesAge.filter((n) => n.etat === 'allume').length, tot = recettesAge.length;
@@ -669,7 +669,7 @@
         const estMatiere = (n) => n.id && I[n.id] && !I[n.id].r;
         const matieres = visibles.filter(estMatiere), recettes = visibles.filter((n) => !estMatiere(n));
         h += (recettes.length ? '<div class="arb-frise">' + recettes.map(arbrePastille).join('') + '</div>' : '<p class="small muted">' + (ns.length ? 'Aucune recette pour ce filtre.' : 'Rien découvert pour l’instant.') + '</p>') +
-          (matieres.length ? '<h4 class="arb-sous">Matières vues</h4><div class="arb-frise arb-matieres">' + matieres.map(arbrePastille).join('') + '</div>' : '') + '</details>';
+          (matieres.length ? '<h4 class="arb-sous">Ressources vues</h4><div class="arb-frise arb-matieres">' + matieres.map(arbrePastille).join('') + '</div>' : '') + '</details>';
       }
       if (g.max < D.AGES.length - 1) h += '<p class="small muted">Les autres âges se dévoileront au fil de tes découvertes.</p>';
       return h;
@@ -688,7 +688,7 @@
       if (n.etat === 'allume') h += '<button type="button" class="btn small" data-carnet-rec="' + esc(n.id) + '">Ouvrir la recette dans le Carnet</button>';
       else if (it) h += '<button type="button" class="btn small" data-goto="' + esc(n.id) + '">Voir la fiche</button>';
       h += '</div>';
-      if (n.etat === 'fantome' || (n.etat !== 'allume' && it.r)) h += '<p class="small muted">' + (n.etat === 'fantome' ? 'Essaie avec les ressources que tu as étudiées à l’Atelier.' : 'La recette reste à découvrir à l’Atelier.') + '</p>';
+      if (n.etat === 'fantome' || (n.etat !== 'allume' && it.r)) h += '<p class="small muted">' + (n.etat === 'fantome' ? 'Essaie avec les ressources que tu as étudiées au Labo.' : 'La recette reste à découvrir au Labo.') + '</p>';
       h += '</section>';
       if (v.aval.length) {
         const connus = v.aval.filter((p) => p.etat !== 'fantome'), inconnus = v.aval.length - connus.length;
@@ -1331,14 +1331,14 @@
     const handSig = () => S().hand.q.map((j) => j.id + ":" + j.i + ":" + j.k + ":" + (j.paused ? "p" : "a") + ":" + (j.w ? 1 : 0) + ":" + JSON.stringify(j.miss)).join("|");
     function studyHTML(id) {
       const st = S();
-      const aideBtn = '<button type="button" class="btn-aide mini" data-aide="etude" title="Comprendre l’étude des matières" aria-label="Comprendre l’étude des matières">?</button>';
+      const aideBtn = '<button type="button" class="btn-aide mini" data-aide="etude" title="Comprendre l’étude des ressources" aria-label="Comprendre l’étude des ressources">?</button>';
       if (!st.studied[id]) {
         const c = E.studyCost(id);
-        return '<div class="study"><button class="btn small" data-m="study"' + (st.intu < c ? " disabled" : "") + ">🔍 Étudier · ✨" + c + '</button>' + aideBtn + '<span class="tiny muted">Pour savoir avec quelles actions la tenter.</span></div>';
+        return '<div class="study"><button class="btn small" data-m="study"' + (st.intu < c ? " disabled" : "") + ">🔍 Étudier · ✨" + c + '</button>' + aideBtn + '<span class="tiny muted">Pour savoir avec quels gestes l’essayer.</span></div>';
       }
       const r = E.reactions(id), gs = D.GESTE_ORDER.filter((g) => r[g]);
       return '<div class="study"><span class="tiny muted">🔍 Étudiée.</span> ' + aideBtn + ' ' + (gs.length ? '<span class="tiny muted">Encore à trouver :</span> ' + gs.map((g) => '<span class="g">' + gIc(g) + " " + D.GESTES[g].n + " · " + r[g] + "</span>").join(" ")
-        : '<span class="tiny muted">Rien de plus à tenter avec tes actions et tes ressources, pour l’instant.</span>') + "</div>";
+        : '<span class="tiny muted">Rien de plus à essayer avec tes gestes et tes ressources, pour l’instant.</span>') + "</div>";
     }
     /* Chemin complet vers une cible : échelle verticale des marches, de la plus profonde à la cible. */
     function treeHTML(id, n) {
@@ -1375,7 +1375,7 @@
         if (m.requis) {
           h += '<div class="arb-marche-requis">' + esc(m.requis) + '</div>';
         } else if (m.type === "res" && m.etat !== "fait" && !m.anon) {
-          h += '<div class="arb-marche-manque">En stock : ' + fmt(m.enStock) + ' / ' + fmt(m.quantite) + '</div>';
+          h += '<div class="arb-marche-manque">En réserve : ' + fmt(m.enStock) + ' / ' + fmt(m.quantite) + '</div>';
         } else if (m.type === "craft" && m.etat !== "fait" && !m.anon) {
           h += '<div class="arb-marche-manque">Possédé : ' + fmt(m.enStock) + ' / ' + fmt(m.quantite) + '</div>';
         }
@@ -1388,7 +1388,7 @@
           h += '<button type="button" class="btn small" data-ch-harv="' + esc(m.id) + '" title="Récolter cette ressource">Récolter</button>';
         } else if (m.action === "voir") {
           if (m.anon) {
-            h += '<button type="button" class="btn small ghost" data-ch-atelier="1" title="Découvrir cette recette à l’Atelier">Atelier</button>';
+            h += '<button type="button" class="btn small ghost" data-ch-atelier="1" title="Découvrir cette recette au Labo">Labo</button>';
           } else if (I[m.id] && I[m.id].r) {
             h += '<button type="button" class="btn small ghost" data-ch-voir="' + esc(m.id) + '" title="Voir la recette dans le Carnet">Voir</button>';
           } else {
@@ -1589,13 +1589,13 @@
             }
             const m = E.memory();
             if (m && m.id === id) h += memoryHTML(m);
-            else h += '<p class="tiny muted">À toi de la trouver à l’Atelier. Étudier les ressources aide à savoir quoi tenter.</p>';
+            else h += '<p class="tiny muted">À toi de la trouver au Labo. Étudier les ressources aide à savoir quoi essayer.</p>';
           }
         }
         const uses = Object.keys(I).filter((k) => I[k].r && I[k].r[1][id] !== undefined);
         const ku = uses.filter((k) => st.known[k]), unk = uses.length - ku.length;
         if (uses.length) {
-          // à ta portée : le geste maîtrisé et toutes les matières déjà vues ; les autres viendront plus tard
+          // à ta portée : le geste maîtrisé et toutes les ressources déjà vues ; les autres viendront plus tard
           const now = Object.values(E.reactions(id)).reduce((a, b) => a + b, 0), later = unk - now;
           const unkTxt = (now ? now + " à trouver dès maintenant" : "") + (now && later ? ", " : "") + (later ? later + " plus tard" : "");
           h += '<h3 class="sub">Sert à fabriquer</h3><div class="row wrap">' + ku.map((k) => nav(k)).join("") +
@@ -1636,7 +1636,7 @@
     /* ------------------------------------------------------------ L’ATELIER (production, 0.39)
      * Quoi produire, en quelle quantité, et qui s’en charge : les mains, un apprenti (un ordre
      * permanent avec une cible en Réserve) ou une machine. Aucun établi ici : il est au Labo. */
-    const PROD_ETAT = { ok: "produit", full: "plein", starved: "attend une matière", nomach: "pas de machine capable", busy: "attend un travailleur", off: "en pause" };
+    const PROD_ETAT = { ok: "produit", full: "plein", starved: "attend une ressource", nomach: "pas de machine capable", busy: "attend un travailleur", off: "en pause" };
     function prodRecettes() {
       const st = S(), pin = st.pins || {};
       const sel = Atel && U.atelierSel;
@@ -1768,7 +1768,7 @@
         if (r.ok) {
           const bat = (S().ateliers || {}).construction, eq = bat && (bat.app || bat.ouv);
           toast("🏗️ Chantier lancé : " + esc(I[a.id].n) + (eq ? ". Tes bâtisseurs s’en occupent." : ". Tu le construis à la main ; embauche un bâtisseur pour qu’il s’en charge."), { key: "emb" });
-        } else toast(r.why === "plan" ? "Il manque des matières pour ce chantier : tout est dans la Réserve ou rien ne part." : r.why === "full" ? "La file des commandes est pleine." : "Pas possible pour l’instant.", { key: "emb" });
+        } else toast(r.why === "plan" ? "Il manque des ressources pour ce chantier : tout est dans la Réserve ou rien ne part." : r.why === "full" ? "La file des commandes est pleine." : "Pas possible pour l’instant.", { key: "emb" });
         render(true); return;
       }
       if (a.k === "reparer") {
@@ -1823,12 +1823,12 @@
       const val = E.seuilAtelier(c.id), etats = E.autoEtat(c.id), PAL = (D.TRAVAILLEURS || {}).paliers || [];
       const sel = PAL.reduce((a, x) => (x.p <= val ? x : a), PAL[0] || { p: val, n: "", d: "" }); // le palier qui contient la valeur (une ancienne partie peut avoir 20 %)
       const equipe = (c.apprentis || 0) + (c.ouvriers || 0);
-      const mot = { marche: "en cours", plein: "au seuil", manque: "manque de matière", attend: "en attente", greve: "en grève" };
+      const mot = { marche: "en cours", plein: "au seuil", manque: "manque de ressource", attend: "en attente", greve: "en grève" };
       const lignes = etats.map((x) => '<li class="atel-seuil-l is-' + x.etat + '">' + icon(x.id, "sm") + "<b>" + esc(I[x.id].n) + "</b>" +
         '<span class="tiny muted">' + fmt(x.have) + " / " + fmt(x.cible) + " · " + mot[x.etat] + (x.travailleurs ? " · " + x.travailleurs + " au travail" : "") + "</span></li>").join("");
-      return '<div class="atel-seuil"><div class="atel-seuil-t"><b>Seuil de stock</b><span class="tiny muted">' +
+      return '<div class="atel-seuil"><div class="atel-seuil-t"><b>Seuil</b><span class="tiny muted">' +
         (equipe ? "Tes travailleurs fabriquent seuls ce que le métier connaît, jusqu’à ce seuil." : "Embauche pour que le métier fabrique seul, jusqu’à ce seuil.") + "</span></div>" +
-        '<div class="filters wrap" role="group" aria-label="Seuil de stock">' + PAL.map((x) =>
+        '<div class="filters wrap" role="group" aria-label="Seuil">' + PAL.map((x) =>
           '<button type="button" data-seuil="' + c.id + ":" + x.p + '" class="' + (x.p === sel.p ? "on" : "") + '" aria-pressed="' + (x.p === sel.p) + '">' + esc(x.n) + "</button>").join("") + "</div>" +
         '<p class="tiny muted atel-seuil-d">' + esc(sel.d) + "</p>" +
         (lignes ? '<ul class="atel-seuil-liste">' + lignes + "</ul>" : '<p class="tiny muted">Rien à fabriquer seul pour l’instant : il faut avoir fait une pièce du métier à la main.</p>') +
@@ -1945,7 +1945,7 @@
         if (b.dataset.prod === "main") {
           const q = E.queue(id, prodQty(id));
           if (q.ok) { A.click(); toast("✋ " + esc(I[id].n) + " ×" + fmt(prodQty(id)) + " : fin estimée dans " + fmtTime(q.time) + ".", { key: "prod" }); }
-          else { A.fail(0); toast(q.why === "full" ? "Commandes au maximum." : q.why === "queued" ? "Déjà en cours." : "Il manque des matières : récolte d’abord, ou lance « Tout fabriquer » depuis le Carnet.", { key: "prod" }); }
+          else { A.fail(0); toast(q.why === "full" ? "Commandes au maximum." : q.why === "queued" ? "Déjà en cours." : "Il manque des ressources : récolte d’abord, ou lance « Tout fabriquer » depuis le Carnet.", { key: "prod" }); }
         } else if (b.dataset.prod === "apprenti") {
           const r = E.setCadence(id, Math.max(10, Math.floor(S().inv[id] || 0) + prodQty(id)), true);
           if (r.ok) { A.click(); toast("⚙️ Les machines refabriquent " + esc(I[id].n.toLowerCase()) + " jusqu’à la cible.", { key: "prod" }); }

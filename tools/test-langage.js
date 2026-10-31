@@ -30,7 +30,22 @@ const INTERDITS = [
   ["Postes et outils", "au Labo, on dit stations"],
   ["poste de travail", "au Labo, on dit station"],
   ["sur ce poste", "au Labo, on dit station"],
-  ["sur un autre poste", "au Labo, on dit station"]
+  ["sur un autre poste", "au Labo, on dit station"],
+  ["ces matières", "on dit ressources", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js", "data.js"]],
+  ["tes matières", "on dit ressources", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js", "data.js"]],
+  ["les matières", "on dit ressources", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js", "data.js"]],
+  ["une matière", "on dit ressource", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js", "data.js"]],
+  ["des matières", "on dit ressources", ["recit.js", "ambiance.js", "journal.js", "visiteurs.js", "memoire.js", "data.js"]],
+  ["À tenter", "on dit essayer"],
+  ["la tentative", "on dit un essai"],
+  ["Maintien de stock", "on dit consigne"],
+  ["Cadences des machines", "on dit consignes"],
+  ["Seuil de stock", "on dit seuil"],
+  ["En stock :", "on dit en réserve"],
+  ["à l’Atelier : l’automate", "la découverte se fait au Labo"],
+  ["trouver à l’Atelier", "la découverte se fait au Labo"],
+  ["découvrir à l’Atelier", "la découverte se fait au Labo"],
+  ["l’atelier a fait", "un atelier du jeu est l’écran, jamais le lieu de travail d’une voix"]
 ];
 console.log("Langage du jeu (0.56.1)");
 test("aucune formule d'avant dans les textes lus par le joueur", () => {
