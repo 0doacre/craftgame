@@ -120,3 +120,5 @@
 .atel-fatigue.is-greve { border-color: var(--danger, #a33); }
 .atel-fatigue.is-greve progress { accent-color: var(--danger, #a33); }
 .atel-fatigue .btn { justify-self: start; }
+
+.goulot-lie { color: var(--acc, #b86a2c); }

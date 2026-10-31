@@ -38,7 +38,7 @@
         }
         if (dc !== null) {
           const okIntu = (st.intu || 0) >= dc;
-          const rev = ["Révéler l’action", "Révéler une ressource", "Révéler la recette entière"][lvl] || "Déchiffrer";
+          const rev = ["Révéler le geste", "Révéler une ressource", "Révéler la recette entière"][lvl] || "Déchiffrer";
           acts += '<button class="btn small' + (okIntu ? "" : " ghost") + '" data-goal-decipher="' + id + '"' + (okIntu ? "" : " disabled") + ' title="' + rev + ' contre ' + dc + ' Intuition">✨ Déchiffrer · ' + dc + ' ✨</button>';
         }
         acts += '</div>';
@@ -61,7 +61,7 @@
       const rt = recettesTrouvees();
       let h = '<div class="labo"><div class="labo-tete">' + (Equipped ? '<button type="button" class="btn small ghost" data-ae="legacy" data-value="0">← Postes et outils</button>' : "") + '<button type="button" class="labo-compteur" data-tab2="carnet" title="Ouvrir le Carnet : toutes tes recettes trouvées">Recettes trouvées · ' + rt.n + " / " + rt.total + "</button></div>";
       if (!E.gesteOK(U.geste)) U.geste = "tailler";
-      if (!(st.stats.crafts > 0) && !Tuto.active()) h += '<div class="tip">1. Choisis une <b>action</b>. 2. Pose des <b>ressources</b> sur l’établi. 3. Lance l’action. Pour commencer : <b>Tailler</b> + <b>Bois</b>.</div>';
+      if (!(st.stats.crafts > 0) && !Tuto.active()) h += '<div class="tip">1. Choisis un <b>geste</b>. 2. Pose des <b>ressources</b> sur l’établi. 3. Lance le geste. Pour commencer : <b>Tailler</b> + <b>Bois</b>.</div>';
       // Le premier essai reste possible sans un aller-retour au Domaine.
       const firstWood = I.manche.r[1].bois;
       if (!(st.stats.crafts > 0) && E.count("bois") < firstWood) {
@@ -212,7 +212,7 @@
       flow: "Celles qui entrent ou sortent en ce moment",
       res: "Les ressources brutes, récoltées telles quelles",
       comp: "Les pièces fabriquées à l’Atelier",
-      geste: "Celles qui servent à l’action choisie",
+      geste: "Celles qui servent au geste choisi",
       fav: "Celles que tu as marquées d’un ♥",
       new: "Celles qu’aucune recette connue n’utilise encore",
       try: "Les ressources étudiées qui cachent encore une recette",
@@ -1582,7 +1582,7 @@
             h += '<p class="small muted">Action : ' + (lvl >= 1 ? gesteChip(id) : "?") + " · " + n + " ressource" + (n > 1 ? "s" : "") + (lvl >= 2 ? " dont " + nav(big) : "") + "</p>";
             const dc = E.decipherCost(id);
             if (dc !== null) {
-              const rev = ["Révèle l’action.", "Révèle une des ressources.", "Révèle la recette entière."][lvl];
+              const rev = ["Révèle le geste.", "Révèle une des ressources.", "Révèle la recette entière."][lvl];
               const ok = st.intu >= dc;
               h += '<div class="decipher"><button class="btn small' + (ok ? " pri" : "") + '" data-m="decipher"' + (ok ? "" : " disabled") + ">✨ Déchiffrer : " + dc + " ✨</button>" +
                 '<div class="tiny muted">' + rev + (ok ? "" : " Pas assez d’Intuition (tu as " + fmt(Math.floor(st.intu)) + " ✨).") + "</div></div>";
@@ -1745,7 +1745,7 @@
       const nom = (id) => (I[id] ? I[id].n.toLowerCase() : id);
       const lignes = gs.map((g) => {
         const a = g.action, lib = a ? (a.k === "reparer" ? esc(a.label) : a.k === "prime" ? "Verser une prime · " + fmt(a.cout) + " écus" : a.k === "embaucher" ? "Embaucher un " + esc(Atel.nom(a.fam, a.kind).toLowerCase()) + " · " + fmt(a.cout) + " écus" : esc(a.label)) : "";
-        return '<li class="goulot is-' + g.kind + '"><span class="goulot-txt">' + esc(g.txt) + (g.bloque.length ? '<span class="tiny muted"> · bloque : ' + esc(g.bloque.slice(0, 4).map(nom).join(", ")) + (g.bloque.length > 4 ? "…" : "") + "</span>" : "") + "</span>" +
+        return '<li class="goulot is-' + g.kind + '"><span class="goulot-txt">' + (g.lie ? '<span class="goulot-lie" title="Sert à l’objet que tu suis">★ </span>' : "") + esc(g.txt) + (g.bloque.length ? '<span class="tiny muted"> · bloque : ' + esc(g.bloque.slice(0, 4).map(nom).join(", ")) + (g.bloque.length > 4 ? "…" : "") + "</span>" : "") + "</span>" +
           (a ? '<button type="button" class="btn small" data-goulot="' + esc(g.id) + '">' + lib + "</button>" : "") + "</li>";
       }).join("");
       if (fam) return '<div class="atel-goulots"><b class="tiny">À débloquer · ' + gs.length + '</b><ul class="goulots-liste">' + lignes + "</ul></div>";

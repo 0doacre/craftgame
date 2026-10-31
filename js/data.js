@@ -5,7 +5,7 @@
 (function (root) {
   "use strict";
   const D = {};
-  D.VERSION = "0.59.0";
+  D.VERSION = "0.59.1";
 
   /* ------------------------------------------------------------------ ÂGES */
   D.AGES = [
@@ -75,7 +75,7 @@
     u: "Pour allumer le feu de camp.", d: "Un petit arc dont la corde fait tourner un bâton contre du bois. Tourne assez vite, et le bois finit par fumer.",
     h: "Une tige de bois qui tourne vite contre une bûche finit par fumer." };
   I.feu = { n: "Feu de camp", ic: "🔥", a: 0, t: "stat", r: ["assembler", { archet: 1, bois: 25, caillou: 15 }, 1],
-    e: { st: [{ g: "chauffer", heat: 600 }] }, u: "Ouvre l’action Chauffer, jusqu’à 600 °C.", d: "Le premier feu que tu allumes toi-même.",
+    e: { st: [{ g: "chauffer", heat: 600 }] }, u: "Ouvre le geste Chauffer, jusqu’à 600 °C.", d: "Le premier feu que tu allumes toi-même.",
     h: "La braise prend dans les brindilles sèches, à l’abri d’un cercle de pierres." };
   I.charbon = { n: "Charbon", sym: "⬢", col: "#2b2b2b", a: 0, t: "res", r: ["chauffer", { bois: 4 }, 1, { heat: 600 }],
     u: "Sert dans la torche, le four en argile et la fonte des métaux.", d: "Du bois cuit sans flamme. Il brûle bien plus chaud que le bois.",
@@ -183,7 +183,7 @@
     u: "Sert aux plaques de cuivre, au ciseau et au bronze.", d: "Ton premier métal, rouge et souple.",
     h: "Tu as remarqué la couleur de la roche verte après un feu de forêt ?" };
   I.enclume_pierre = { n: "Enclume de pierre", ic: "⚒️", a: 3, t: "stat", r: ["tailler", { caillou: 120 }, 1],
-    e: { st: [{ g: "marteler", lvl: 1 }] }, u: "Ouvre l’action Marteler.", d: "Un bloc plat et dur, pour battre les métaux tendres.",
+    e: { st: [{ g: "marteler", lvl: 1 }] }, u: "Ouvre le geste Marteler.", d: "Un bloc plat et dur, pour battre les métaux tendres.",
     h: "Un gros bloc de basalte aplani au percuteur encaisse les frappes répétées." };
   I.plaque_cuivre = { n: "Plaque de cuivre", sym: "▤", col: "#c7713b", a: 3, t: "comp", r: ["marteler", { lingot_cuivre: 1 }, 2],
     u: "Sert au fil de cuivre, au puits de mine et à la lampe.", d: "Du cuivre battu en feuille.", h: "Le cuivre rouge se laisse aplatir sous les coups de marteau." };
@@ -194,7 +194,7 @@
     r: ["chauffer", { cassiterite: 3, charbon: 1 }, 1, { heat: 1100 }],
     u: "Sert à fabriquer le bronze, avec le cuivre.", d: "Un métal gris et mou, qui crie quand on le plie.", h: "Ces galets noirs et pesants fondent vite sur la braise en un métal blanc." };
   I.creuset = { n: "Creuset", ic: "⚗️", a: 3, t: "stat", r: ["chauffer", { argile: 20, os: 15 }, 1, { heat: 1100 }],
-    e: { st: [{ g: "allier" }] }, u: "Ouvre l’action Allier.", d: "Un pot réfractaire où les métaux fondent ensemble.",
+    e: { st: [{ g: "allier" }] }, u: "Ouvre le geste Allier.", d: "Un pot réfractaire où les métaux fondent ensemble.",
     h: "La terre mélangée à de la poudre d’os cuite retient le métal en fusion." };
   I.puits = { n: "Puits de mine", sn: "puits", pl: "puits", ic: "🕳️", a: 3, t: "ext", z: "collines", s: 1.2,
     r: ["assembler", { manche: 20, corde: 12, plaque_cuivre: 6 }, 1], p: { malachite: 0.4, cassiterite: 0.2 },
@@ -315,7 +315,7 @@
     r: ["allier", { lingot_fer: 2, charbon: 1 }, 2, { heat: 1700 }],
     u: "Sert dans l’acier trempé, les pistons, le moteur électrique et beaucoup de constructions : tour d’usinage, treuil, derrick…", d: "Du fer avec une pointe de carbone.", h: "Ce fer a traîné dans le charbon de forge, il a gardé de la souplesse." };
   I.bac_trempe = { n: "Bac de trempe", ic: "🛁", a: 6, t: "stat", r: ["assembler", { bois: 540, plaque_fer: 35, clous: 140 }, 1],
-    e: { st: [{ g: "tremper" }] }, u: "Ouvre l’action Tremper.", d: "Un grand bac d’eau froide. Le métal brûlant y durcit d’un coup.",
+    e: { st: [{ g: "tremper" }] }, u: "Ouvre le geste Tremper.", d: "Un grand bac d’eau froide. Le métal brûlant y durcit d’un coup.",
     h: "Une cuve d’eau froide posée près de l’enclume saisit le métal au rouge." };
   I.acier_trempe = { n: "Acier trempé", sym: "Ac", col: "#5e86b8", a: 6, t: "comp", r: ["tremper", { lingot_acier: 1 }, 1],
     u: "Sert dans les engrenages d’acier, les roulements, les aimants, les outils d’acier, et dans beaucoup de constructions plus tard.", d: "Dur, et pourtant il plie sans casser.", h: "L’acier chauffé au rouge puis plongé d’un coup dans l’eau glacée ressort dur au point de rayer le fer." };
@@ -324,7 +324,7 @@
   I.verre_trempe = { n: "Verre trempé", sym: "◈", col: "#5ab8cf", a: 6, t: "comp", r: ["tremper", { verre: 2 }, 1],
     u: "Sert dans les cellules photovoltaïques, l’ordinateur et le réacteur chimique.", d: "Un verre qui ne se brise plus.", h: "Un coup d’air froid sur une plaque de verre brûlante la rend résistante aux chocs." };
   I.tour = { n: "Tour d’usinage", ic: "🗜️", a: 6, t: "stat", r: ["assembler", { lingot_acier: 55, engrenage: 70, manche: 35 }, 1],
-    e: { st: [{ g: "usiner" }] }, u: "Ouvre l’action Usiner.", d: "Elle façonne le métal au dixième de millimètre.",
+    e: { st: [{ g: "usiner" }] }, u: "Ouvre le geste Usiner.", d: "Elle façonne le métal au dixième de millimètre.",
     h: "En faisant tourner la pièce contre un tranchant fixe, on tire des cylindres impeccables." };
   I.piston = { n: "Piston", sym: "▮", col: "#9fb0c4", a: 7, t: "comp", r: ["usiner", { lingot_acier: 2 }, 1],
     u: "Sert dans le moteur à vapeur.", d: "Il pousse, il tire, il recommence.", h: "La vapeur sous pression enfermée dans un cylindre étanche repousse un disque d’acier." };
@@ -393,7 +393,7 @@
   I.aimant = { n: "Aimant", ic: "🧲", a: 8, t: "comp", r: ["assembler", { acier_trempe: 2, bobine: 1 }, 1],
     u: "Sert dans la dynamo, le télégraphe et le moteur électrique.", d: "Il attire le fer. Tu passes un moment à jouer avec des clous.", h: "Le clou d’acier est resté collé à la génératrice et maintenant il attire la limaille." };
   I.dynamo = { n: "Dynamo", ic: "🔌", a: 8, t: "stat", r: ["assembler", { aimant: 10, bobine: 20, moteur_vapeur: 4 }, 1],
-    e: { st: [{ g: "electriser", lvl: 1 }] }, u: "Ouvre l’action Électriser.", d: "La vapeur fait tourner des aimants dans des bobines, et le courant passe.",
+    e: { st: [{ g: "electriser", lvl: 1 }] }, u: "Ouvre le geste Électriser.", d: "La vapeur fait tourner des aimants dans des bobines, et le courant passe.",
     h: "Faire tourner des bobines de cuivre entre deux aimants produit du courant continu." };
   I.cuivre_pur = { n: "Cuivre pur", sym: "Cu", col: "#ff9a5c", a: 8, t: "comp", r: ["electriser", { lingot_cuivre: 2 }, 2],
     u: "Sert dans le four à arc, le réseau électrique et les puces.", d: "Raffiné par le courant, pur à 99,99 %.", h: "Le passage d’un courant dans un bain d’électrolyte dépose du cuivre débarrassé de tout résidu." };
@@ -452,7 +452,7 @@
   I.wafer = { n: "Plaquette de silicium", ic: "💿", a: 10, t: "comp", r: ["tailler", { silicium: 1 }, 4],
     u: "Sert dans les puces et les cellules photovoltaïques.", d: "Un disque miroir, parfaitement plat.", h: "Il nous faut du silicium bien plus fin pour en faire quelque chose d’utile." };
   I.lithographe = { n: "Lithographe", ic: "🔬", a: 10, t: "stat", r: ["assembler", { lentille: 90, moteur_elec: 15, acier_trempe: 90 }, 1],
-    e: { st: [{ g: "graver" }] }, u: "Ouvre l’action Graver.", d: "Il dessine avec la lumière des traits plus fins qu’un cheveu.",
+    e: { st: [{ g: "graver" }] }, u: "Ouvre le geste Graver.", d: "Il dessine avec la lumière des traits plus fins qu’un cheveu.",
     h: "Un jeu d’optiques précises focalise la lumière pour insoler des tracés à l’échelle du micron." };
   I.puce = { n: "Puce", sym: "▣", col: "#3f9a68", a: 10, t: "comp", r: ["graver", { wafer: 1, cuivre_pur: 1 }, 2],
     u: "Sert dans les processeurs et les circuits imprimés.", d: "Des millions de minuscules interrupteurs.", h: "À cette échelle, seule la lumière est assez précise pour tracer un réseau." };
@@ -497,7 +497,7 @@
   I.ilmenite = { b: 0.5, n: "Ilménite", sym: "◓", col: "#4a4a5c", a: 11, t: "res", u: "Sert à fabriquer le titane.", d: "Un sable noir et lourd." };
   I.terres_rares = { b: 0.2, n: "Terres rares", sym: "✳", col: "#8a6bbe", a: 11, t: "res", u: "Sert dans les aimants néodyme et les supraconducteurs.", d: "Pas si rares, mais si dispersées." };
   I.reacteur = { n: "Réacteur chimique", ic: "🧪", a: 11, t: "stat", r: ["assembler", { acier_trempe: 240, verre_trempe: 120, processeur: 40 }, 1],
-    e: { st: [{ g: "synthetiser" }] }, u: "Ouvre l’action Synthétiser.", d: "Des cuves, et des tuyaux partout.",
+    e: { st: [{ g: "synthetiser" }] }, u: "Ouvre le geste Synthétiser.", d: "Des cuves, et des tuyaux partout.",
     h: "Dans une cuve en inox sous pression, les produits se mélangent sans ronger les parois ni fuir." };
   I.plastique = { n: "Plastique", ic: "🧴", a: 11, t: "comp", r: ["synthetiser", { naphta: 3 }, 2],
     u: "Sert dans l’outillage électrique, la fibre de carbone et le graphène. Il en faut aussi pour le passage vers les Pics Fracturés.", d: "Tu peux lui donner toutes les formes et toutes les couleurs.", h: "Le naphta polymérisé donne une matière synthétique facile à mouler et insensible à l’humidité." };
@@ -543,7 +543,7 @@
   I.tissu_carbone = { n: "Tissu de carbone", sym: "▦", col: "#2b2b2b", a: 12, t: "comp", r: ["tresser", { fibre_carbone: 4 }, 1],
     u: "Sert à fabriquer le composite carbone.", d: "Tu tresses du fil noir comme tu tressais les herbes de la Lisière.", h: "Le tissage des mèches de carbone produit une nappe souple prête pour l’imprégnation." };
   I.autoclave = { n: "Autoclave", ic: "⏲️", a: 12, t: "stat", r: ["assembler", { titane: 200, acier_trempe: 400, processeur: 100 }, 1],
-    e: { st: [{ g: "stratifier" }] }, u: "Ouvre l’action Stratifier.", d: "Il règle la pression et la chaleur au degré près.",
+    e: { st: [{ g: "stratifier" }] }, u: "Ouvre le geste Stratifier.", d: "Il règle la pression et la chaleur au degré près.",
     h: "Un caisson étanche chauffé sous vide chasse l’air des pièces pendant la cuisson des résines." };
   I.composite = { n: "Composite carbone", sym: "▩", col: "#1d3038", a: 12, t: "comp", r: ["stratifier", { tissu_carbone: 2, resine: 1 }, 1],
     u: "Sert dans la fusée, le vaisseau, les boucliers thermiques et bien d’autres. Il en faut aussi pour les passages vers l’Orbite Basse, la Lune et Mercure.", d: "Une plaque noire, légère, que rien ne raye.", h: "L’association de tissu de carbone et de résine époxy forme un matériau plus rigide que l’acier à poids égal." };
@@ -1204,7 +1204,7 @@
     ["manche", "Récolte du bois, puis taille un manche à l’Atelier."],
     ["corde", "Tresse des fibres pour faire une corde."],
     { k: "exp", z: "lisiere", x: "chene", n: "Explorer le Grand Chêne", txt: "Explore le Grand Chêne depuis la Lisière. L’exploration avance seule." },
-    ["feu", "La nuit tombe. Construis un feu de camp : il ouvre l’action Chauffer."],
+    ["feu", "La nuit tombe. Construis un feu de camp : il ouvre le geste Chauffer."],
     ["cabane", "Une cabane posée sur un gisement récolte à ta place."],
     { k: "ext", n: "Poser ta cabane", txt: "Dans les Terres, touche « + cabane » sur le bois : elle récolte même quand le jeu est fermé." },
     ["epieu", "L’épieu ouvre le chemin vers la Plaine."],
@@ -1223,11 +1223,11 @@
     { k: "line", n: "Faire tourner ton automate", txt: "Lance une commande d’une recette à une ressource, déjà fabriquée à la main (des manches, des cordes, des éclats…) : ton automate s’y met tout seul." },
     ["four", "Le feu de camp ne chauffe plus assez. Le four en argile monte jusqu’à 1 100 °C."],
     ["lingot_cuivre", "La pierre verte des collines cache un métal."],
-    ["enclume_pierre", "Le métal se travaille à coups de marteau, sur quelque chose de dur. L’enclume ouvre l’action Marteler."],
+    ["enclume_pierre", "Le métal se travaille à coups de marteau, sur quelque chose de dur. L’enclume ouvre le geste Marteler."],
     ["plaque_cuivre", "Sur l’enclume, martèle une première plaque de cuivre."],
     ["lingot_etain", "La cassitérite des Collines cache un autre métal : fonds de l’étain pour préparer l’alliage."],
     ["charbonniere", "Construis une meule de charbonnier, puis pose-la dans la Lisière : elle alimentera les fontes sans brûler tout ton bois à la main."],
-    ["creuset", "Il faudrait pouvoir fondre plusieurs métaux ensemble. Le creuset ouvre l’action Allier."],
+    ["creuset", "Il faudrait pouvoir fondre plusieurs métaux ensemble. Le creuset ouvre le geste Allier."],
     ["lingot_bronze", "Le métal rouge est trop mou. Allie-le."],
     ["automate_bronze", "Un automate de bronze travaillerait bien plus vite que ta marionnette de bois."],
     ["pioche_bronze", "Il te faut une pioche plus dure pour creuser vers les Profondeurs."],
@@ -1240,9 +1240,9 @@
     ["lunette", "Une étoile rouge pulse dans le ciel. Il te faut la voir de plus près."],
     ["haut_fourneau", "Pour l’acier, il faut encore plus chaud. Le haut-fourneau monte jusqu’à 1 700 °C."],
     ["lingot_acier", "Fer et carbone, à très haute température."],
-    ["bac_trempe", "Un grand bac d’eau froide pour durcir le métal brûlant d’un coup. Le bac ouvre l’action Tremper."],
+    ["bac_trempe", "Un grand bac d’eau froide pour durcir le métal brûlant d’un coup. Le bac ouvre le geste Tremper."],
     ["acier_trempe", "Plonge l’acier brûlant dans l’eau froide : il devient dur comme jamais."],
-    ["tour", "Le tour d’usinage ouvre l’action Usiner, pour tailler le métal avec la régularité d’une machine."],
+    ["tour", "Le tour d’usinage ouvre le geste Usiner, pour tailler le métal avec la régularité d’une machine."],
     ["engrenage_acier", "Taillés dans l’acier trempé, ces engrenages transmettent la force motrice sans faiblir ni casser."],
     ["roulement", "Des billes d’acier trempé dans leur cage : les roulements réduisent le frottement au cœur des futures machines."],
     ["martinet", "Une roue à eau peut battre le fer à ta place. Le martinet hydraulique aide tes commandes."],
@@ -1254,7 +1254,7 @@
     ["regulateur", "Un moteur à vapeur qui s’emballe se brise. Quelque chose doit le retenir."],
     ["presse_vapeur", "Une machine-outil à vapeur ferait tourner tes machines bien plus vite."],
     ["recuperation_vapeur", "La vapeur peut redevenir de l’eau dans un condenseur. Raccorde-le aux moteurs pour accélérer tes machines."],
-    ["dynamo", "Capture l’étincelle. La dynamo ouvre l’action Électriser."],
+    ["dynamo", "Capture l’étincelle. La dynamo ouvre le geste Électriser."],
     ["poste_elec", "Un moteur électrique sur chaque poste : plus besoin d’arbre ni de courroie."],
     ["radio", "Quelqu’un émet peut-être encore, quelque part."],
     ["four_arc", "Un éclair permanent, pour fondre ce que rien d’autre ne fond. Le four à arc monte jusqu’à 3 500 °C."],
@@ -1266,14 +1266,14 @@
     ["barre_combustible", "L’uranium cuit, enfermé dans l’acier, devient un combustible."],
     ["centrale_fission", "De la chaleur sans flamme : fais-la travailler à ta place."],
     ["silicium", "Le quartz cache un métal qui pense."],
-    ["lithographe", "La lumière peut graver des circuits plus fins qu’un cheveu. Le lithographe ouvre l’action Graver."],
+    ["lithographe", "La lumière peut graver des circuits plus fins qu’un cheveu. Le lithographe ouvre le geste Graver."],
     ["wafer", "Le silicium se taille en plaquettes minces et polies comme des miroirs."],
     ["puce", "La lumière grave des pistes de cuivre microscopiques sur le silicium."],
     ["processeur", "Plusieurs puces réunies exécutent des séries d’ordres sans jamais hésiter."],
     ["ordinateur", "Construis une machine qui calcule."],
     ["chaine", "Construis une ligne d’assemblage : ses machines aideront les commandes de recettes déjà fabriquées à la main. Lance ensuite un lot de processeurs ou de pièces pour tes prochains chantiers."],
     ["radiotelescope", "Une coupole géante tournée vers les étoiles pour capter les signaux du Cosmos."],
-    ["reacteur", "Le réacteur chimique ouvre l’action Synthétiser : il recompose les molécules."],
+    ["reacteur", "Le réacteur chimique ouvre le geste Synthétiser : il recompose les molécules."],
     ["naphta", "Le pétrole contient plusieurs produits. Chauffe-le pour en séparer le naphta."],
     ["plastique", "Le naphta peut devenir une pièce moulée : essaie de le synthétiser."],
     ["soufre_1", "Le soufre des Collines donne de l’élasticité au caoutchouc. Construis une soufrière pour le récolter."],
@@ -1283,7 +1283,7 @@
     ["dynamite", "Les Pics Fracturés ne s’ouvriront qu’à l’explosif."],
     { k: "pass", z: "montagnes", n: "Vers les Pics Fracturés", txt: "Les Pics n’ont qu’un col. Il faut l’ouvrir, puis le tenir." },
     ["titane", "Le métal le plus noble des montagnes."],
-    ["autoclave", "Pour les composites, il faut cuire sous pression. L’autoclave ouvre l’action Stratifier."],
+    ["autoclave", "Pour les composites, il faut cuire sous pression. L’autoclave ouvre le geste Stratifier."],
     ["composite", "Il te faut le matériau des fusées : léger, et plus dur que l’acier."],
     ["centre_num", "Un calculateur peut guider un outil mieux qu’une main. Le centre d’usinage numérique."],
     ["fusee", "Construis une fusée pour monter en orbite."],
@@ -1293,7 +1293,7 @@
     ["reacteur_fusion", "Une étoile en bouteille. Tous tes extracteurs récoltent 1,5 fois plus vite."],
     ["vaisseau", "Cap sur Mercure."],
     { k: "pass", z: "mercure", n: "Vers Mercure", txt: "Si près du soleil, rien ne tient sans bouclier." },
-    ["forge_stellaire", "Le cœur d’une étoile, à 50 000 °C. La forge stellaire ouvre l’action Transmuter."],
+    ["forge_stellaire", "Le cœur d’une étoile, à 50 000 °C. La forge stellaire ouvre le geste Transmuter."],
     ["matrice", "Il reste à fabriquer sans façonner : donne la matière, la matrice fait l’objet."]
   ];
 
@@ -1632,7 +1632,7 @@
       { p: 0, n: "Au repos", d: "Personne ne fabrique seul : les travailleurs ne servent que ta file de commandes." },
       { p: 10, n: "Au jour le jour", d: "Juste de quoi ne pas être pris de court : un petit stock de chaque pièce." },
       { p: 30, n: "Quelques réserves", d: "Un peu d’avance sur chaque pièce, de quoi tenir une absence." },
-      { p: 50, n: "Bien garni", d: "Les étagères se remplissent à moitié : beaucoup de matière part en composants." },
+      { p: 50, n: "Bien garni", d: "Les étagères se remplissent à moitié : beaucoup de matière part en pièces." },
       { p: 100, n: "À ras bord", d: "Toute pièce connue monte jusqu’à son plein stock. Gourmand en matières premières." }
     ],
     confort: { base: 20, parAge: 1.5, max: 200 },
@@ -1724,6 +1724,7 @@
   D.DECHIFFRER = { cost: [3, 8, 20] };
 
   D.CHANGES = [
+    "⭐ Les goulots suivent ton objectif : ceux qui touchent l’objet que tu suis passent devant, marqués d’une étoile. Les textes qui parlaient encore d’« action » disent « geste » (fiches des stations, conseils, Labo), et l’ancien conseil sur « la part réservée de l’apprenti » décrit enfin les travailleurs d’aujourd’hui.",
     "🔧 L’usure des machines. Une machine qui travaille longtemps s’use ; à bout, un exemplaire tombe en panne et ne travaille plus (jamais plus de la moitié du parc d’un type à la fois). Un goulot te prévient quand une panne approche et propose d’entretenir ou de réparer contre quelques écus. Jeu fermé, rien ne s’use, et tout est réparé à ton retour.",
     "🔥 Les centrales ont faim. La chaudière, la centrale, la centrale à fission et le réacteur à fusion brûlent un combustible de ta Réserve (charbon, uranium, hélium-3) tant que le jeu est ouvert et que quelque chose travaille. Réserve vide, la source s’arrête et l’énergie baisse : un goulot te le dit (et te prévient quand il reste moins de deux minutes), la page de l’énergie montre combien de temps chaque source tient. Rien ne se perd, ça repart dès que tu as de quoi brûler, et rien ne brûle jeu fermé. Le moulin, la vapeur récupérée et la dynamo n’en veulent pas.",
     "✊ La fatigue et la grève. Chaque métier a une jauge de fatigue : elle monte quand ses travailleurs fabriquent seuls sans relâche (surtout si l’énergie manque), elle descend quand ils se reposent. Tes travailleurs te préviennent quand ils sont à bout ; à fond de jauge, ils se mettent en grève : plus rien ne se fabrique seul dans ce métier, mais ta file de commandes continue et rien n’est perdu. Ils reprennent quand ils ont soufflé, ou tout de suite contre une prime en écus (sur la page du métier ou depuis un goulot). Jeu fermé, ils se reposent : tu ne retrouves jamais une grève à ton retour.",

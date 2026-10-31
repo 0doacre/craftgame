@@ -1872,6 +1872,18 @@
       if ((S.inv[i] || 0) >= autoCible(i) - 1e-9) return { kind: "seuil", ing: i, fam: f2 };
       return null;
     }
+    /* les pièces dont dépend l’objet suivi (S.track), de proche en proche, avec lui-même */
+    function arbreSuivi() {
+      const vus = {};
+      const va = (id, p) => { if (!id || vus[id] || p > 8) return; vus[id] = true; const it = item(id); if (it && it.r && it.r[1]) Object.keys(it.r[1]).forEach((x) => va(x, p + 1)); };
+      if (S.track && S.track.id) va(S.track.id, 0);
+      return vus;
+    }
+    function lieObjectif(g) {
+      const t = arbreSuivi();
+      if (!Object.keys(t).length) return false;
+      return !!(t[g.ing] || (g.ings || []).some((x) => t[x]));
+    }
     E.goulots = function () {
       const liste = {};
       const ajoute = (c, fam, rec) => {
@@ -1961,7 +1973,8 @@
         }
         else if (g.kind === "energie") { txt = "L’énergie manque : travailleurs et machines tournent à " + g.pct + " %"; action = { k: "energie", label: "Voir l’énergie" }; }
         return Object.assign(g, { txt, action });
-      }).sort((a, b) => (b.kind === "energie") - (a.kind === "energie") || b.poids - a.poids || a.id.localeCompare(b.id));
+      }).map((g) => { g.lie = lieObjectif(g); return g; })
+        .sort((a, b) => (b.kind === "energie") - (a.kind === "energie") || b.lie - a.lie || b.poids - a.poids || a.id.localeCompare(b.id)); // 0.59 : ce qui touche l’objectif suivi passe devant
     };
     /* affecte les machines restées libres après les commandes aux cadences de maintien de stock, puis les travailleurs libres à leur métier */
     function assignCadenceWorkers() {
@@ -4113,8 +4126,8 @@
       },
       ouvrier: {
         kicker: "Atelier équipé",
-        titre: "L’apprenti et sa part réservée",
-        texte: "L’apprenti t’épaule à l’établi aménagé tant qu’une part est réservée pour lui. Il façonne les pièces de façon autonome. Tu peux suspendre son aide ou reprendre la réserve à tout moment."
+        titre: "Les travailleurs",
+        texte: "Chaque métier a ses travailleurs : apprentis, puis ouvriers. Ils fabriquent à ta place les pièces du métier que tu as déjà faites une fois à la main, jusqu’au seuil que tu fixes. Ils se fatiguent à force de travailler seuls, et se mettent en grève s’ils sont poussés trop loin : une prime les remet au travail."
       },
       outils: {
         kicker: "Atelier équipé",

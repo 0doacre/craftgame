@@ -526,3 +526,18 @@ test("au réglage par défaut, dix minutes de jeu ne cassent rien", () => {
   avance(E, 600);
   assert.equal(E.usure("automate_bois").pannes, 0);
 });
+
+console.log("Les goulots suivent l'objectif (0.59)");
+test("un goulot qui touche l'objet suivi passe devant les autres et porte la marque « lie »", () => {
+  const E = jeuFatigue();
+  E.state.inv.centrale = 1; E.state.inv.charbon = 1;
+  avance(E, 20);
+  assert.equal(E.goulots().find((x) => x.kind === "combustible").lie, false, "rien de suivi");
+  E.setTrack("torche"); // la torche demande du charbon
+  const l = E.goulots();
+  assert.equal(l.find((x) => x.kind === "combustible").lie, true);
+  const iL = l.findIndex((x) => x.lie), iN = l.findIndex((x) => !x.lie);
+  if (iN >= 0) assert.ok(iL < iN, "les goulots liés d'abord");
+  E.setTrack("torche"); // on arrête de suivre
+  assert.equal(E.goulots().find((x) => x.kind === "combustible").lie, false);
+});

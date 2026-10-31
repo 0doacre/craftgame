@@ -260,7 +260,7 @@
     function memoryHTML(m, gain) {
       if (!m) return "";
       const f = Math.max(0, Math.min(1, (m.p - m.prev) / (m.next - m.prev)));
-      const what = (["l’action", "une des ressources", "la recette entière"][m.lvl] || "") + (I[m.id] ? " de « " + I[m.id].n + " »" : "");
+      const what = (["le geste", "une des ressources", "la recette entière"][m.lvl] || "") + (I[m.id] ? " de « " + I[m.id].n + " »" : "");
       return '<div class="memory"><div class="row between tiny"><span>💭 Souvenirs' + (gain ? ' <b class="gain">' + gain + "</b>" : "") + "</span><span class=\"muted\">prochain : " + what + "</span></div>" +
         '<div class="bar"><i style="width:' + (f * 100).toFixed(0) + '%"></i></div>' +
         (gain ? "" : '<div class="tiny dim">Chaque nouvelle combinaison tentée à l’Atelier réveille des souvenirs, surtout si elle se rapproche de ce que tu cherches.</div>') + "</div>";
